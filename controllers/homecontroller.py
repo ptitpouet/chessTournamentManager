@@ -8,9 +8,10 @@ from views.tournamentmenuview import TournamentView
 
 class HomeController:
 
-    def __init__(self, view):
+    def __init__(self, view, database):
         # views
         self.view = view
+        self.database = database
 
     def run(self):
         self.view.show_welcome()
@@ -18,7 +19,7 @@ class HomeController:
 
         if option == 1:
             players_view = PlayersMenuView()
-            players_controller = PlayersController(players_view)
+            players_controller = PlayersController(players_view, self.database)
             players_controller.run()
         elif option == 2:
             tournament_view = TournamentView()

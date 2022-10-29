@@ -1,59 +1,71 @@
+OPTIONS = (
+    'Update a Player Rank',
+    'Delete a Player from database',
+    'Reset all',
+    '<- back'
+)
+
+
 class PlayersListView:
 
     def display_player(self, i, player):
         print("________________________________________________")
         print(str(i) + "| " + str(player))
 
-    def prompt_for_player_id(self):
+    def prompt_for_player_id(self, length):
         """Prompt for player id in list"""
         try:
-            i = int(input("Enter the player's id in the list: "))
-            return i
+            user_input = int(input("Enter the player's id in the list: "))
+            if 0 < user_input <= length:
+                return user_input
+            else:
+                console_message = 'your input shall be in the list range (1 to' + str(length) \
+                                  + '). Value entered was: ' + str(user_input)
+                print(console_message)
+                raise Exception(console_message)
         except:
-            print('Wrong input. Please retry...')
-            self.prompt_for_player_id()
+            print('Wrong input. Please enter a valid number (between 1 and ' + str(length) + ')')
 
-    def confirm_deletion(self, player):
-        userinput = input('Do you confirm deletion of '+ player.firstname + " " + player.lastname +'? Y(es)')
-        if userinput == 'Y' or userinput == 'yes':
-            return True
-        else:
-            return False
+    def prompt_for_player_deletion_confirmation(self, player):
+        try:
+            userinput = input('Please confirm deletion of ' + player.firstname + " " + player.lastname +
+                              '? Y(es) or N(o)')
+            userinput = str(userinput).lower()
+            if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o':
+                return True
+            elif userinput == 'n' or userinput == 'no' or userinput == 'non':
+                return False
+        except:
+            print("!!! Error. Enter 'Y' or 'N'). Operation aborted.")
 
-    def update_player_rank(self, player):
+    def prompt_for_player_rank_update(self, player):
         """Prompt for update player rank"""
         try:
-            rank = int(input("New rank value for "+ player.firstname + " " + player.lastname + " :"))
-            return rank
+            rank = int(input("New rank value for " + player.firstname + " " + player.lastname + " :"))
+            if rank > 0:
+                print('Success. Rank updated')
+                return rank
+            else:
+                console_message = 'Input shall be a positive integer value. (> ' + rank+')'
+                print(console_message)
+                raise Exception(console_message)
         except:
-            print('Wrong input. Please retry...')
-            self.update_player_rank(player)
+            print('!!! Error wrong value. Operation aborted')
 
     def prompt_for_list_interaction(self):
-        """Prompt for the user's choice of what to do"""
-        menu_options = {
-            1: 'Delete Player',
-            2: 'Update Rank',
-            3: '<- back'
-        }
-
-        def print_menu():
-            for key in menu_options.keys():
-                print(key, '    --', menu_options[key])
-
-        def print_option(option):
-            print('--> ' + str(option))
-
+        """Prompt for the player gender"""
+        user_choice = 0
         print("________________________________________________")
         print("    What do you want to do?")
+
+        def print_menu():
+            for value in OPTIONS:
+                print(OPTIONS.index(value) + 1, '--', value)
+
         print_menu()
         try:
-            option = int(input('Enter your choice: '))
+            user_choice = int(input('Enter your choice: '))
         except:
-            print('Wrong input. Please enter a number ...')
-        if option >= 1 or option <= 3:
-            print_option(menu_options[option])
-        else:
-            print('Invalid option. Please enter a number between 1 and 3.')
+            print('!!! Wrong input. Please enter a number between 1 and ' + str(len(OPTIONS) + 1))
 
-        return option
+        return user_choice

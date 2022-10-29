@@ -2,16 +2,17 @@ from views.playerscreationview import PlayersCreationView
 from views.playerslistview import PlayersListView
 from views.playersmenuview import PlayersMenuView
 from models.player import Player
+from database import Database
 
 
 class PlayersController:
-    players_list = []
-
-    def __init__(self, view):
+    def __init__(self, view, database):
         # views
         self.view = view
+        self.db = database
 
     def run(self):
+
         self.view.show_welcome()
 
         option = self.view.prompt_for_section()
@@ -20,7 +21,7 @@ class PlayersController:
             self.create_player()
             self.display_menu()
         elif option == 2:
-            self.display_players_list(self.players_list)
+            self.display_players_list()
         elif option == 3:
             pass
         else:
@@ -30,41 +31,61 @@ class PlayersController:
         self.view = PlayersMenuView()
         self.run()
 
-    def display_players_list(self, players_list):
+    def display_players_list(self):
         self.view = PlayersListView()
+
+        players_list = self.load_players_list_from_database()
         i = 0
         for player in players_list:
             i += 1
             self.view.display_player(i, player)
+
         if len(players_list) > 0:
             option = self.view.prompt_for_list_interaction()
             if option == 1:
-                self.delete_player()
+                self.update_rank(players_list)
             elif option == 2:
-                self.update_rank()
-            elif option == 3:
+                self.delete_player(players_list)
+            elif option == 2:
+                self.reset_players_database()
+            elif option == 4:
                 self.display_menu()
             else:
                 self.display_menu()
         else:
             self.display_menu()
 
-    def delete_player(self):
-        player_id = self.view.prompt_for_player_id()
+    def reset_players_database(self):
+        pass
 
-        if (self.view.confirm_deletion(self.players_list[player_id - 1])):
-            self.players_list.pop(player_id - 1)
+    def delete_player(self, players_list):
+        player_id = self.view.prompt_for_player_id(len(players_list))
+        if player_id is not None:
+            index_player_id = player_id - 1
 
-        self.display_players_list(self.players_list)
+            if self.view.prompt_for_player_deletion_confirmation(players_list[index_player_id]):
+                players_list.pop(index_player_id)
 
-    def update_rank(self):
-        player_id = self.view.prompt_for_player_id()
-        new_rank = self.view.update_player_rank(self.players_list[player_id - 1])
-        self.players_list[player_id - 1].rank = new_rank
+            self.save_players_list_in_database(players_list)
+            self.display_players_list()
+        else:
+            self.delete_player(players_list)
 
-        self.display_players_list(self.players_list)
+    def update_rank(self, players_list):
+        player_id = self.view.prompt_for_player_id(len(players_list))
+        if player_id is not None:
+            player_id = player_id - 1
 
+            new_rank = self.view.prompt_for_player_rank_update(players_list[player_id])
+            players_list[player_id].rank = new_rank
+
+            self.save_players_list_in_database(players_list)
+            self.display_players_list()
+        else:
+            self.update_rank(players_list)
     def create_player(self):
+        players_list = self.load_players_list_from_database
+
         self.view = PlayersCreationView()
         self.view.show_welcome()
         last_name = self.view.prompt_for_last_name()
@@ -73,15 +94,34 @@ class PlayersController:
         gender = self.view.prompt_for_gender()
         rank = self.view.prompt_for_rank()
 
-        self.players_list.append(Player(last_name, first_name, birthday, gender, rank))
+        players_list.append(Player(last_name, first_name, birthday, gender, rank))
+        self.save_players_list_in_database(players_list)
 
         if self.view.prompt_for_another_player():
             self.create_player()
 
-    def serialized_players_list(self):
+    def serialized_players_list(self, players_list):
         serialized_players_list = []
-        for player in self.players_list:
-            serialized_player = player.serialize()
-            serialized_players_list.append(serialized_player)
+        for player in players_list:
+            serialized_players_list.append(player.serialize())
 
         return serialized_players_list
+
+    def save_players_list_in_database(self, players_list):
+        self.db.save_players_in_database(self.serialized_players_list(players_list))
+
+    def load_players_list_from_database(self):
+        players_list = []
+        serialized_players_list = self.db.get_players_from_database()
+
+        if serialized_players_list is not None:
+            for serialized_player in serialized_players_list:
+                player = Player(serialized_player['lastname'],
+                                serialized_player['firstname'],
+                                serialized_player['birthday'],
+                                serialized_player['gender'],
+                                serialized_player['rank'])
+                player.score = serialized_player['score']
+                player.opponent_list = serialized_player['opponent_list']
+                players_list.append(player)
+        return players_list
