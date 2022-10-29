@@ -1,3 +1,4 @@
+from views.homeview import HomeView
 from views.playerscreationview import PlayersCreationView
 from views.playerslistview import PlayersListView
 from views.playersmenuview import PlayersMenuView
@@ -22,9 +23,13 @@ class PlayersController:
         elif option == 2:
             self.display_players_list()
         elif option == 3:
-            self.display_menu()
+            self.back_home()
         else:
             pass
+
+    def back_home(self):
+        self.view = HomeView()
+        self.run()
 
     def display_menu(self):
         self.view = PlayersMenuView()
