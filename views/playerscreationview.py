@@ -5,8 +5,7 @@ class PlayersCreationView:
 
     def show_welcome(self):
         """New User Creation"""
-        print('~~ New User Creation ~~')
-        print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
+        print('~~ Player Creation ~~')
 
     def prompt_for_last_name(self):
         """Prompt for the player last name"""

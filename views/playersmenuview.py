@@ -1,36 +1,30 @@
+OPTIONS = (
+    'Create a new Player',
+    'Show Players list',
+    '<- back'
+)
 class PlayersMenuView:
 
     def show_welcome(self):
         """Welcome the user"""
-        print('~~ Players Management ~~')
-        print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
-
+        print('~~ Players Administration ~~')
 
     def prompt_for_section(self):
-        """Prompt for the user's choice of what to do"""
-        menu_options = {
-            1: 'Create a new Player',
-            2: 'Show Players list',
-            3: '<- back'
-        }
+        """Prompt for the players Administration"""
+        user_choice = 0
+        print("------------------------------------------------")
+        print("     > What do you want to do?")
 
         def print_menu():
-            for key in menu_options.keys():
-                print(key, '--', menu_options[key])
+            for value in OPTIONS:
+                print(OPTIONS.index(value) + 1, '--', value)
 
-        def print_option(option):
-            print('--> '+ str(option))
-
-        print("What do you want to do?")
         print_menu()
         try:
-            option = int(input('Enter your choice: '))
+            user_choice = int(input('Enter your choice: '))
         except:
-            print('Wrong input. Please enter a number ...')
-        if option >= 1 or option <= 3:
-            print_option(menu_options[option])
-        else:
-            print('Invalid option. Please enter a number between 1 and 3.')
+            print('!!! Wrong input. Please enter a number between 1 and ' + str(len(OPTIONS) + 1))
 
-        return option
+        return user_choice
+
 

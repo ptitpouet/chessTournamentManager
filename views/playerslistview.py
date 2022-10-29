@@ -9,7 +9,7 @@ OPTIONS = (
 class PlayersListView:
 
     def display_player(self, i, player):
-        print("________________________________________________")
+        print("------------------------------------------------")
         print(str(i) + "| " + str(player))
 
     def prompt_for_player_id(self, length):
@@ -53,10 +53,10 @@ class PlayersListView:
             print('!!! Error wrong value. Operation aborted')
 
     def prompt_for_list_interaction(self):
-        """Prompt for the player gender"""
+        """Prompt for the players List Options"""
         user_choice = 0
-        print("________________________________________________")
-        print("    What do you want to do?")
+        print("------------------------------------------------")
+        print("     > What do you want to do?")
 
         def print_menu():
             for value in OPTIONS:

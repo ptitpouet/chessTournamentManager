@@ -2,7 +2,6 @@ from views.playerscreationview import PlayersCreationView
 from views.playerslistview import PlayersListView
 from views.playersmenuview import PlayersMenuView
 from models.player import Player
-from database import Database
 
 
 class PlayersController:
@@ -23,7 +22,7 @@ class PlayersController:
         elif option == 2:
             self.display_players_list()
         elif option == 3:
-            pass
+            self.display_menu()
         else:
             pass
 
@@ -46,7 +45,7 @@ class PlayersController:
                 self.update_rank(players_list)
             elif option == 2:
                 self.delete_player(players_list)
-            elif option == 2:
+            elif option == 3:
                 self.reset_players_database()
             elif option == 4:
                 self.display_menu()
@@ -83,6 +82,7 @@ class PlayersController:
             self.display_players_list()
         else:
             self.update_rank(players_list)
+
     def create_player(self):
         players_list = self.load_players_list_from_database
 

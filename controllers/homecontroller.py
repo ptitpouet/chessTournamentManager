@@ -18,16 +18,18 @@ class HomeController:
         option = self.view.prompt_for_section()
 
         if option == 1:
-            players_view = PlayersMenuView()
-            players_controller = PlayersController(players_view, self.database)
-            players_controller.run()
-        elif option == 2:
             tournament_view = TournamentView()
             tournament_controller = TournamentController(tournament_view)
             tournament_controller.run()
+        elif option == 2:
+            players_view = PlayersMenuView()
+            players_controller = PlayersController(players_view, self.database)
+            players_controller.run()
         elif option == 3:
             report_view = ReportView()
             report_controller = ReportController(report_view)
             report_controller.run()
+        elif option == 4:
+            quit()
         else:
             pass
