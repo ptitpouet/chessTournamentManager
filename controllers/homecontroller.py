@@ -19,7 +19,7 @@ class HomeController:
 
         if option == 1:
             tournament_view = TournamentView()
-            tournament_controller = TournamentController(tournament_view)
+            tournament_controller = TournamentController(tournament_view, self.database)
             tournament_controller.run()
         elif option == 2:
             players_view = PlayersMenuView()

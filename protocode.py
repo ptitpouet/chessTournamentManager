@@ -70,7 +70,7 @@ tournament.attendees.append(joueur6)
 tournament.attendees.append(joueur7)
 tournament.attendees.append(joueur8)
 
-for i in range(tournament.nbofRounds):
+for i in range(tournament.nb_of_rounds):
     if firstRound is True:
         firstRoundMatches = generateMatchesPairsWithSwissSystem(tournament.attendees, True)
 

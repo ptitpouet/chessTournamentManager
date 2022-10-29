@@ -5,13 +5,23 @@ from .round import Round
 TIME_CONTROL = ("bullet", "blitz", "fast")
 
 class Tournament:
-    def __init__(self, name, location, date, nbofRounds,
-                 description, timeControl):
+    def __init__(self, name, location, date, nb_of_rounds,
+                 description, time_control):
         self.name = name
         self.location = location
         self.date = date
-        self.nbofRounds = nbofRounds
+        self.nb_of_rounds = nb_of_rounds
         self.description = description
-        self.timeControl = TIME_CONTROL.index(timeControl)
+        self.time_control = time_control
         self.attendees = []
         self.rounds = []
+
+
+    def __str__(self):
+        """Used in print."""
+        return f"{self.name} {self.location} ({self.description}" \
+               f" - {self.date}). Rounds : {self.nb_of_rounds} | Mode : {TIME_CONTROL[self.time_control]}"
+
+    def __repr__(self):
+        """Used in print."""
+        return str(self)
