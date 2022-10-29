@@ -89,17 +89,47 @@ class PlayersController:
             self.update_rank(players_list)
 
     def create_player(self):
-        players_list = self.load_players_list_from_database
+        players_list = self.load_players_list_from_database()
 
         self.view = PlayersCreationView()
         self.view.show_welcome()
-        last_name = self.view.prompt_for_last_name()
-        first_name = self.view.prompt_for_first_name()
-        birthday = self.view.prompt_for_birthday()
-        gender = self.view.prompt_for_gender()
-        rank = self.view.prompt_for_rank()
 
-        players_list.append(Player(last_name, first_name, birthday, gender, rank))
+        def get_last_name():
+            last_name = self.view.prompt_for_last_name()
+            if last_name is None:
+                get_last_name()
+            else:
+                return last_name
+
+        def get_first_name():
+            first_name = self.view.prompt_for_first_name()
+            if first_name is None:
+                get_first_name()
+            else:
+                return first_name
+
+        def get_birthday():
+            birthday = self.view.prompt_for_birthday()
+            if birthday is None:
+                get_birthday()
+            else:
+                return birthday
+
+        def get_gender():
+            gender = self.view.prompt_for_gender()
+            if gender is None:
+                get_gender()
+            else:
+                return gender
+
+        def get_rank():
+            rank = self.view.prompt_for_rank()
+            if rank is None:
+                get_rank()
+            else:
+                return rank
+
+        players_list.append(Player(get_last_name(), get_first_name(), get_birthday(), get_gender(), get_rank()))
         self.save_players_list_in_database(players_list)
 
         if self.view.prompt_for_another_player():

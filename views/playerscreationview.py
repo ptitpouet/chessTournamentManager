@@ -10,20 +10,18 @@ class PlayersCreationView:
     def prompt_for_last_name(self):
         """Prompt for the player last name"""
         try:
-            last_name = input('Enter the first name: ')
+            last_name = input('Enter the last name: ')
             return last_name
         except:
             print('Wrong input. Please retry...')
-            self.prompt_for_last_name()
 
     def prompt_for_first_name(self):
         """Prompt for the player first name"""
         try:
-            first_name = input('Enter the last name: ')
+            first_name = input('Enter the first name: ')
             return first_name
         except:
             print('Wrong input. Please retry...')
-            self.prompt_for_last_name()
 
     def prompt_for_birthday(self):
         """Prompt for the player birthdate"""
@@ -32,7 +30,6 @@ class PlayersCreationView:
             return birthday
         except:
             print('Wrong input. Please retry...')
-            self.prompt_for_birthday()
 
     def prompt_for_gender(self):
         """Prompt for the player gender"""
@@ -57,16 +54,16 @@ class PlayersCreationView:
             return rank
         except:
             print('Wrong input. Please retry...')
-            self.prompt_for_rank()
 
     def prompt_for_another_player(self):
         """Prompt for additional player creation"""
         try:
             userinput = input('Do you want to create an additional player? Y(es) / N(o)')
-            if userinput == 'Y' or userinput == 'yes':
+            if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o':
                 return True
+            elif userinput == 'n' or userinput == 'no' or userinput == 'non':
+                return False
             else:
                 return False
         except:
             print('Wrong input. Please retry...')
-            self.prompt_for_another_player()

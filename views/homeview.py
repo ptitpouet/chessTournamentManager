@@ -11,7 +11,7 @@ class HomeView:
     def show_welcome(self):
         """Welcome the user"""
         print('Welcome to the Chess Tournament Manager!')
-        print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
+        print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
 
     def prompt_for_section(self):
         """Prompt for the Home Menu"""
