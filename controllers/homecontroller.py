@@ -1,9 +1,9 @@
 from controllers.playerscontroller import PlayersController
 from controllers.reportcontroller import ReportController
-from controllers.tournamentcontroller import TournamentController
+from controllers.tournamentmanagementcontroller import TournamentManagementController
 from views.playersmenuview import PlayersMenuView
 from views.reportmenuview import ReportView
-from views.tournamentmenuview import TournamentView
+from views.tournamentmenuview import TournamentMenuView
 
 
 class HomeController:
@@ -18,8 +18,8 @@ class HomeController:
         option = self.view.prompt_for_section()
 
         if option == 1:
-            tournament_view = TournamentView()
-            tournament_controller = TournamentController(tournament_view, self.database)
+            tournament_view = TournamentMenuView()
+            tournament_controller = TournamentManagementController(tournament_view, self.database)
             tournament_controller.run()
         elif option == 2:
             players_view = PlayersMenuView()

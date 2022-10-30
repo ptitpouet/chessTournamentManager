@@ -1,11 +1,11 @@
 OPTIONS = (
-    'Launch a Tournament',
-    'Reload a Tournament',
+    'Create a Tournament',
+    'Load a Tournament',
     '< Exit >'
 )
 
 
-class TournamentView:
+class TournamentMenuView:
 
     def show_welcome(self):
         """Welcome the user"""

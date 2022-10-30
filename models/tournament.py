@@ -4,6 +4,7 @@ from .round import Round
 
 TIME_CONTROL = ("bullet", "blitz", "fast")
 
+
 class Tournament:
     def __init__(self, name, location, date, nb_of_rounds,
                  description, time_control):
@@ -15,7 +16,7 @@ class Tournament:
         self.time_control = time_control
         self.attendees = []
         self.rounds = []
-
+        self.is_finished = False
 
     def __str__(self):
         """Used in print."""
@@ -25,3 +26,18 @@ class Tournament:
     def __repr__(self):
         """Used in print."""
         return str(self)
+
+    def serialize(self):
+        serialized_tournament = {
+            'name' : self.name,
+            'location' : self.location,
+            'date' : self.date,
+            'nb_of_rounds' : self.nb_of_rounds,
+            'description' : self.description,
+            'time_control' : self.time_control,
+            'attendees' : self.attendees,
+            'rounds' : self.rounds,
+            'is_finished' : self.is_finished
+        }
+        return serialized_tournament
+

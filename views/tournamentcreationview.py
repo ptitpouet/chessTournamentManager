@@ -60,3 +60,17 @@ class TournamentCreationView:
             print('Wrong input. Please enter a number ...')
         return user_choice
 
+    def prompt_for_load_created_tournament(self):
+        """Prompt for load the newly created Tournament"""
+        try:
+            print("Tournament successfully created and added to the database")
+            userinput = input('Do you want to launch this Tournament ? Y(es) / N(o)')
+            userinput = str(userinput).lower()
+            if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o':
+                return True
+            elif userinput == 'n' or userinput == 'no' or userinput == 'non':
+                return False
+            else:
+                return False
+        except:
+            print('Wrong input. Please retry...')
