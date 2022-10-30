@@ -59,6 +59,7 @@ class PlayersCreationView:
         """Prompt for additional player creation"""
         try:
             userinput = input('Do you want to create an additional player? Y(es) / N(o)')
+            userinput = str(userinput).lower()
             if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o':
                 return True
             elif userinput == 'n' or userinput == 'no' or userinput == 'non':

@@ -47,12 +47,15 @@ class PlayersController:
         if len(players_list) > 0:
             option = self.view.prompt_for_list_interaction()
             if option == 1:
-                self.update_rank(players_list)
+                self.create_player()
+                self.display_menu()
             elif option == 2:
-                self.delete_player(players_list)
+                self.update_rank(players_list)
             elif option == 3:
-                self.reset_players_database()
+                self.delete_player(players_list)
             elif option == 4:
+                self.reset_players_database()
+            elif option == 5:
                 self.display_menu()
             else:
                 self.display_menu()
@@ -135,22 +138,22 @@ class PlayersController:
         if self.view.prompt_for_another_player():
             self.create_player()
 
-    def serialized_players_list(self, players_list):
-        serialized_players_list = []
-        for player in players_list:
-            serialized_players_list.append(player.serialize())
+    def save_players_list_in_database(self, players_list_to_save):
+        def get_serialized_players_list(players_list_to_serialize):
+            serialized_players_list = []
+            for player in players_list_to_serialize:
+                serialized_players_list.append(player.serialize())
 
-        return serialized_players_list
+            return serialized_players_list
 
-    def save_players_list_in_database(self, players_list):
-        self.db.save_players_in_database(self.serialized_players_list(players_list))
+        self.db.save_players_in_database(get_serialized_players_list(players_list_to_save))
 
     def load_players_list_from_database(self):
         players_list = []
-        serialized_players_list = self.db.get_players_from_database()
+        serialized_players_list_from_db = self.db.get_players_from_database()
 
-        if serialized_players_list is not None:
-            for serialized_player in serialized_players_list:
+        if serialized_players_list_from_db is not None:
+            for serialized_player in serialized_players_list_from_db:
                 player = Player(serialized_player['lastname'],
                                 serialized_player['firstname'],
                                 serialized_player['birthday'],

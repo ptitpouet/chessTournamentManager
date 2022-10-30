@@ -1,4 +1,5 @@
 OPTIONS = (
+    'Add a new Player',
     'Update a Player Rank',
     'Delete a Player from database',
     'Reset all',
@@ -8,8 +9,12 @@ OPTIONS = (
 
 class PlayersListView:
 
+
+    def print_separator_line(self):
+        print("-------------------------------------------------------------------------------------------------------")
+
     def display_player(self, i, player):
-        print("------------------------------------------------")
+        self.print_separator_line()
         print(str(i) + "| " + str(player))
 
     def prompt_for_player_id(self, length):
@@ -55,7 +60,7 @@ class PlayersListView:
     def prompt_for_list_interaction(self):
         """Prompt for the players List Options"""
         user_choice = 0
-        print("------------------------------------------------")
+        self.print_separator_line()
         print("     > What do you want to do?")
 
         def print_menu():
