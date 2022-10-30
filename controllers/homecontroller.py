@@ -19,8 +19,8 @@ class HomeController:
 
         if option == 1:
             tournament_view = TournamentMenuView()
-            tournament_controller = TournamentManagementController(tournament_view, self.database)
-            tournament_controller.run()
+            tournament_management_controller = TournamentManagementController(tournament_view, self.database)
+            tournament_management_controller.run()
         elif option == 2:
             players_view = PlayersMenuView()
             players_controller = PlayersController(players_view, self.database)

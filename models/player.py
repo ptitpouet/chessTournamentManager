@@ -13,7 +13,7 @@ class Player:
 
     def __str__(self):
         """Used in print."""
-        return f"{self.firstname} {self.lastname} ({GENDER[self.gender]} - {self.birthday}). Rank : {self.rank} | Score : {self.score}"
+        return f"{self.firstname} {self.lastname} ({GENDER[self.gender]} - {self.birthday}). Rank : {self.rank}"
 
     def __repr__(self):
         """Used in print."""
@@ -26,7 +26,5 @@ class Player:
             'birthday': self.birthday,
             'gender': self.gender,
             'rank': self.rank,
-            'score': self.score,
-            'opponent_list': self.opponent_list
         }
         return serialized_player

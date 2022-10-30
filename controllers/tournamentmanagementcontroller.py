@@ -1,7 +1,10 @@
+from controllers.tournamentrunnercontroller import TournamentRunnerController
 from models.tournament import Tournament
 from views.homeview import HomeView
 from views.tournamentcreationview import TournamentCreationView
 from views.tournamentmenuview import TournamentMenuView
+from views.tournamentrunnerview import TournamentRunnerView
+from views.tournamentslistview import TournamentsListView
 
 
 class TournamentManagementController:
@@ -21,7 +24,7 @@ class TournamentManagementController:
         elif option == 2:
             self.display_tournaments_list()
         elif option == 3:
-            self.display_menu()
+            self.back_home()
         else:
             pass
 
@@ -32,6 +35,63 @@ class TournamentManagementController:
     def display_menu(self):
         self.view = TournamentMenuView()
         self.run()
+
+    def select_tournament(self, tournaments_list):
+        tournament_id = self.view.prompt_for_tournament_id(len(tournaments_list))
+        if tournament_id is not None:
+            index_tournament_id = tournament_id - 1
+            return tournaments_list[index_tournament_id]
+
+    def launch_tournament(self, tournament):
+        print("Launch this Tournament")
+        self.view = TournamentRunnerView()
+        tournament_runner_controller = TournamentRunnerController(self.view, tournament, self.db)
+        tournament_runner_controller.run()
+
+    def display_tournaments_list(self):
+        self.view = TournamentsListView()
+
+        tournaments_list = self.load_tournaments_list_from_database()
+        i = 0
+        for tournament in tournaments_list:
+            i += 1
+            self.view.display_tournament(i, tournament)
+
+        if len(tournaments_list) > 0:
+            option = self.view.prompt_for_list_interaction()
+            if option == 1:
+                tournament = self.select_tournament(tournaments_list)
+                self.launch_tournament(tournament)
+            elif option == 2:
+                self.create_tournament()
+                self.display_menu()
+            elif option == 3:
+                self.delete_tournament(tournaments_list)
+                self.display_menu()
+            elif option == 4:
+                self.reset_tournaments_database()
+            elif option == 5:
+                self.display_menu()
+            else:
+                self.display_menu()
+        else:
+            self.display_menu()
+
+    def reset_tournaments_database(self):
+        pass
+
+    def delete_tournament(self, tournaments_list):
+        tournament_id = self.view.prompt_for_tournament_id(len(tournaments_list))
+        if tournament_id is not None:
+            index_tournament_id = tournament_id - 1
+
+            if self.view.prompt_for_tournament_deletion_confirmation(tournaments_list[index_tournament_id]):
+                tournaments_list.pop(index_tournament_id)
+
+            self.save_tournaments_list_in_database(tournaments_list)
+            self.display_tournaments_list()
+        else:
+            self.delete_tournament(tournaments_list)
 
     def create_tournament(self):
         self.view = TournamentCreationView()
@@ -94,7 +154,7 @@ class TournamentManagementController:
         self.save_tournaments_list_in_database(tournaments_list)
 
         if self.view.prompt_for_load_created_tournament():
-            print("Launch this Tournament")
+            self.launch_tournament(tournament)
         else:
             self.display_menu()
 
@@ -127,29 +187,3 @@ class TournamentManagementController:
                 tournaments_list.append(tournament)
 
         return tournaments_list
-
-    def display_tournaments_list(self):
-        # self.view = TournamentsListView()
-
-        tournaments_list = self.load_tournaments_list_from_database()
-        i = 0
-        for tournament in tournaments_list:
-            i += 1
-            print(str(tournament))
-            # self.view.display_Tournament(i, player)
-        '''
-        if len(tournaments_list) > 0:
-            #option = self.view.prompt_for_list_interaction()
-            if option == 1:
-                pass
-            elif option == 2:
-                pass
-            elif option == 3:
-                pass
-            elif option == 5:
-                self.display_menu()
-            else:
-                self.display_menu()
-        else:
-            self.display_menu()
-        '''

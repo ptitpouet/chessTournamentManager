@@ -1,6 +1,6 @@
 OPTIONS = (
     'Create a Tournament',
-    'Load a Tournament',
+    'Show Tournaments List',
     '< Exit >'
 )
 

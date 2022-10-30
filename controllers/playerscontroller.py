@@ -159,7 +159,5 @@ class PlayersController:
                                 serialized_player['birthday'],
                                 serialized_player['gender'],
                                 serialized_player['rank'])
-                player.score = serialized_player['score']
-                player.opponent_list = serialized_player['opponent_list']
                 players_list.append(player)
         return players_list
