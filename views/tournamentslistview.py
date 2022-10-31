@@ -1,8 +1,8 @@
 OPTIONS = (
     'Launch a Tournament',
-    'Add a new Tournament',
-    'Delete a Tournament from database',
-    'Reset all',
+    'Create a new Tournament',
+    'Delete a Tournament',
+    'Reset database',
     '<- back'
 )
 

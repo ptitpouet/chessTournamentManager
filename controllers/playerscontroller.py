@@ -12,16 +12,15 @@ class PlayersController:
         self.db = database
 
     def run(self):
-
         self.view.show_welcome()
-
         option = self.view.prompt_for_section()
 
         if option == 1:
             self.create_player()
-            self.display_menu()
+            self.display_player_menu()
         elif option == 2:
-            self.display_players_list()
+            players_list = self.display_players_list()
+            self.display_players_list_options(players_list)
         elif option == 3:
             self.back_home()
         else:
@@ -31,7 +30,7 @@ class PlayersController:
         self.view = HomeView()
         self.run()
 
-    def display_menu(self):
+    def display_player_menu(self):
         self.view = PlayersMenuView()
         self.run()
 
@@ -43,29 +42,34 @@ class PlayersController:
         for player in players_list:
             i += 1
             self.view.display_player(i, player)
+        return players_list
 
+    def display_players_list_options(self, players_list):
         if len(players_list) > 0:
             option = self.view.prompt_for_list_interaction()
             if option == 1:
                 self.create_player()
-                self.display_menu()
+                self.display_player_menu()
             elif option == 2:
-                self.update_rank(players_list)
+                self.update_rank()
+                self.display_player_menu()
             elif option == 3:
-                self.delete_player(players_list)
+                self.delete_player()
+                self.display_player_menu()
             elif option == 4:
                 self.reset_players_database()
             elif option == 5:
-                self.display_menu()
+                self.display_player_menu()
             else:
-                self.display_menu()
+                self.display_player_menu()
         else:
-            self.display_menu()
+            self.display_player_menu()
 
     def reset_players_database(self):
         pass
 
     def delete_player(self, players_list):
+        players_list = self.display_players_list()
         player_id = self.view.prompt_for_player_id(len(players_list))
         if player_id is not None:
             index_player_id = player_id - 1
@@ -74,11 +78,12 @@ class PlayersController:
                 players_list.pop(index_player_id)
 
             self.db.save_players_list_in_database(players_list)
-            self.display_players_list()
+            self.display_players_list_options()
         else:
-            self.delete_player(players_list)
+            self.display_players_list_options(players_list)
 
-    def update_rank(self, players_list):
+    def update_rank(self):
+        players_list = self.display_players_list()
         player_id = self.view.prompt_for_player_id(len(players_list))
         if player_id is not None:
             player_id = player_id - 1
@@ -87,15 +92,15 @@ class PlayersController:
             players_list[player_id].rank = new_rank
 
             self.db.save_players_list_in_database(players_list)
-            self.display_players_list()
+            self.display_players_list_options()
         else:
-            self.update_rank(players_list)
+            self.display_players_list_options(players_list)
 
     def create_player(self):
-        players_list = self.db.load_players_list_from_database()
-
         self.view = PlayersCreationView()
         self.view.show_welcome()
+
+        players_list = self.db.load_players_list_from_database()
 
         def get_last_name():
             last_name = self.view.prompt_for_last_name()
@@ -133,9 +138,12 @@ class PlayersController:
                 return rank
 
         players_list.append(Player(get_last_name(), get_first_name(), get_birthday(), get_gender(), get_rank()))
+
         self.db.save_players_list_in_database(players_list)
 
         if self.view.prompt_for_another_player():
             self.create_player()
+        else:
+            self.display_player_menu()
 
 

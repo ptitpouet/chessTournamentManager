@@ -25,7 +25,7 @@ class HomeView:
 
         print_menu()
         try:
-            user_choice = int(input('Enter your choice: '))
+            user_choice = int(input('     > Enter your choice: '))
         except:
             print('!!! Wrong input. Please enter a number between 1 and ' + str(len(OPTIONS) + 1))
 

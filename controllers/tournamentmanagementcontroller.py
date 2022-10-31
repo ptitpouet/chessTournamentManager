@@ -20,9 +20,9 @@ class TournamentManagementController:
 
         if option == 1:
             self.create_tournament()
-            self.display_menu()
         elif option == 2:
-            self.display_tournaments_list()
+            tournaments_list = self.display_tournaments_list()
+            self.display_tournaments_list_options(tournaments_list)
         elif option == 3:
             self.back_home()
         else:
@@ -32,7 +32,7 @@ class TournamentManagementController:
         self.view = HomeView()
         self.run()
 
-    def display_menu(self):
+    def display_tournament_menu(self):
         self.view = TournamentMenuView()
         self.run()
 
@@ -42,8 +42,10 @@ class TournamentManagementController:
             index_tournament_id = tournament_id - 1
             return tournaments_list[index_tournament_id]
 
-    def launch_tournament(self, tournament):
-        print("Launch this Tournament")
+    def launch_tournament(self, tournaments_list):
+        self.display_tournaments_list()
+        tournament = self.select_tournament(tournaments_list)
+
         self.view = TournamentRunnerView()
         tournament_runner_controller = TournamentRunnerController(self.view, tournament, self.db)
         tournament_runner_controller.run()
@@ -56,31 +58,33 @@ class TournamentManagementController:
         for tournament in tournaments_list:
             i += 1
             self.view.display_tournament(i, tournament)
+        return tournaments_list
 
+    def display_tournaments_list_options(self, tournaments_list):
         if len(tournaments_list) > 0:
             option = self.view.prompt_for_list_interaction()
             if option == 1:
-                tournament = self.select_tournament(tournaments_list)
-                self.launch_tournament(tournament)
+                self.launch_tournament(tournaments_list)
             elif option == 2:
                 self.create_tournament()
-                self.display_menu()
+                self.display_tournament_menu()
             elif option == 3:
-                self.delete_tournament(tournaments_list)
-                self.display_menu()
+                self.delete_tournament()
+                self.display_tournament_menu()
             elif option == 4:
                 self.reset_tournaments_database()
             elif option == 5:
-                self.display_menu()
+                self.display_tournament_menu()
             else:
-                self.display_menu()
+                self.display_tournament_menu()
         else:
-            self.display_menu()
+            self.display_tournament_menu()
 
     def reset_tournaments_database(self):
         pass
 
-    def delete_tournament(self, tournaments_list):
+    def delete_tournament(self):
+        tournaments_list = self.display_tournaments_list()
         tournament_id = self.view.prompt_for_tournament_id(len(tournaments_list))
         if tournament_id is not None:
             index_tournament_id = tournament_id - 1
@@ -89,9 +93,9 @@ class TournamentManagementController:
                 tournaments_list.pop(index_tournament_id)
 
             self.db.save_tournaments_list_in_database(tournaments_list)
-            self.display_tournaments_list()
+            self.display_tournaments_list(tournaments_list)
         else:
-            self.delete_tournament(tournaments_list)
+            self.display_tournaments_list_options(tournaments_list)
 
     def create_tournament(self):
         self.view = TournamentCreationView()
@@ -156,6 +160,6 @@ class TournamentManagementController:
         if self.view.prompt_for_load_created_tournament():
             self.launch_tournament(tournament)
         else:
-            self.display_menu()
+            self.display_tournament_menu()
 
 
