@@ -35,23 +35,9 @@ class TournamentRunnerController:
             self.view.display_player(i, player)
         return players_list
 
-    def load_players_list_from_database(self):
-        players_list = []
-        serialized_players_list_from_db = self.db.get_players_from_database()
-
-        if serialized_players_list_from_db is not None:
-            for serialized_player in serialized_players_list_from_db:
-                player = Player(serialized_player['lastname'],
-                                serialized_player['firstname'],
-                                serialized_player['birthday'],
-                                serialized_player['gender'],
-                                serialized_player['rank'])
-                players_list.append(player)
-        return players_list
-
     def add_players_in_attendees_list(self, players_list):
         if players_list is None or len(players_list) == 0:
-            players_list = self.load_players_list_from_database()
+            players_list = self.db.load_players_list_from_database()
 
         players_list = self.display_players_list(players_list)
         players_list = self.add_attendees_in_list(players_list)
@@ -76,33 +62,33 @@ class TournamentRunnerController:
                 self.select_player(all_players_list)
 
     # méthode de tri des joueurs
-    def generate_match_pairs_with_swiss_system(self, playersList, isFirstTour):
-        def sort_players_by_score_then_rank(playersList):
-            return sorted(playersList, key=attrgetter('score', 'rank', 'birthday'), reverse=True)
+    def generate_match_pairs_with_swiss_system(self, players_list, isFirstTour):
+        def sort_players_by_score_then_rank(players_list):
+            return sorted(players_list, key=attrgetter('score', 'rank', 'birthday'), reverse=True)
 
-        def generate_first_tour_matches_pairs(sortedList):
+        def generate_first_tour_matches_pairs(sorted_list):
             matches = []
-            for i in range(0, int(len(sortedList) / 2), 1):
-                matches.append(Match(sortedList[i], sortedList[i + int(len(sortedList) / 2)]))
+            for i in range(0, int(len(sorted_list) / 2), 1):
+                matches.append(Match(sorted_list[i], sorted_list[i + int(len(sorted_list) / 2)]))
             return matches
 
-        def generate_following_tour_matches_pairs(sortedList):
+        def generate_following_tour_matches_pairs(sorted_list):
             matches = []
-            while len(sortedList) >= 2:
+            while len(sorted_list) >= 2:
                 print("in the while")
-                for j in range(1, len(sortedList), 1):
+                for j in range(1, len(sorted_list), 1):
                     print(j)
-                    print(sortedList[j].opponent_list.name)
-                    if sortedList[0] not in sortedList[j].opponent_list:
-                        matches.append(Match(sortedList[0], sortedList[j]))
-                        sortedList.pop(j)
-                        sortedList.pop(0)
+                    print(sorted_list[j].opponent_list.name)
+                    if sorted_list[0] not in sorted_list[j].opponent_list:
+                        matches.append(Match(sorted_list[0], sorted_list[j]))
+                        sorted_list.pop(j)
+                        sorted_list.pop(0)
                         break
                     else:
                         print("else")
             return matches
 
-        sorted_list = sort_players_by_score_then_rank(playersList)
+        sorted_list = sort_players_by_score_then_rank(players_list)
         if isFirstTour:
             return generate_first_tour_matches_pairs(sorted_list)
         else:
