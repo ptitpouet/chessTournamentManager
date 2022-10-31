@@ -32,11 +32,11 @@ class TournamentsListView:
 
     def prompt_for_tournament_deletion_confirmation(self, tournament):
         try:
-            userinput = input('     > Confirm deletion of ' + tournament.name + '? Y(es) or N(o)')
+            userinput = input('     > Confirm deletion of ' + tournament.name + '? Y(es) / N(o)')
             userinput = str(userinput).lower()
             if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o':
                 return True
-            elif userinput == 'n' or userinput == 'no' or userinput == 'non':
+            elif userinput == 'n' or userinput == 'no' or userinput == 'non' or userinput == '':
                 return False
         except:
             print("!!! Error. Enter 'Y' or 'N'). Operation aborted.")

@@ -59,9 +59,9 @@ class PlayersCreationView:
         """Prompt for additional player creation"""
         try:
             print("Player successfully created and added to the database")
-            userinput = input('     > Do you want to create an additional player? Y(es) / N(o)')
+            userinput = input('     > Do you want to create an additional player? Y(es)[default] / N(o)')
             userinput = str(userinput).lower()
-            if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o':
+            if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o' or userinput == '':
                 return True
             elif userinput == 'n' or userinput == 'no' or userinput == 'non':
                 return False

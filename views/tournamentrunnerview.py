@@ -28,9 +28,9 @@ class TournamentRunnerView:
 
     def prompt_for_add_another_player(self):
         try:
-            userinput = input('     > Add another player Y(es) or N(o)')
+            userinput = input('     > Add another player Y(es)[default] or N(o)')
             userinput = str(userinput).lower()
-            if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o':
+            if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o' or userinput == '':
                 return True
             elif userinput == 'n' or userinput == 'no' or userinput == 'non':
                 return False
