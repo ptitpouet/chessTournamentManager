@@ -10,7 +10,7 @@ class PlayersCreationView:
     def prompt_for_last_name(self):
         """Prompt for the player last name"""
         try:
-            last_name = input('Enter the last name: ')
+            last_name = input('     > Enter the last name: ')
             return last_name
         except:
             print('Wrong input. Please retry...')
@@ -18,7 +18,7 @@ class PlayersCreationView:
     def prompt_for_first_name(self):
         """Prompt for the player first name"""
         try:
-            first_name = input('Enter the first name: ')
+            first_name = input('     > Enter the first name: ')
             return first_name
         except:
             print('Wrong input. Please retry...')
@@ -26,7 +26,7 @@ class PlayersCreationView:
     def prompt_for_birthday(self):
         """Prompt for the player birthdate"""
         try:
-            birthday = input('Enter the birthday (yyyy-mm-dd): ')
+            birthday = input('     > Enter the birthday (yyyy-mm-dd): ')
             return birthday
         except:
             print('Wrong input. Please retry...')
@@ -41,7 +41,7 @@ class PlayersCreationView:
 
         print_menu()
         try:
-            user_choice = int(input('Enter your gender: '))
+            user_choice = int(input('     > Enter the gender: '))
         except:
             print('Wrong input. Please enter a number ...')
 
@@ -50,7 +50,7 @@ class PlayersCreationView:
     def prompt_for_rank(self):
         """Prompt for the player rank"""
         try:
-            rank = int(input("Enter the player's rank: "))
+            rank = int(input("     > Enter the player's rank: "))
             return rank
         except:
             print('Wrong input. Please retry...')
@@ -59,7 +59,7 @@ class PlayersCreationView:
         """Prompt for additional player creation"""
         try:
             print("Player successfully created and added to the database")
-            userinput = input('Do you want to create an additional player? Y(es) / N(o)')
+            userinput = input('     > Do you want to create an additional player? Y(es) / N(o)')
             userinput = str(userinput).lower()
             if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o':
                 return True

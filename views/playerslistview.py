@@ -20,7 +20,7 @@ class PlayersListView:
     def prompt_for_player_id(self, length):
         """Prompt for player id in list"""
         try:
-            user_input = int(input("Enter the player's id in the list: "))
+            user_input = int(input("     > Enter the player's id in the list: "))
             if 0 < user_input <= length:
                 return user_input
             else:
@@ -33,7 +33,7 @@ class PlayersListView:
 
     def prompt_for_player_deletion_confirmation(self, player):
         try:
-            userinput = input('Please confirm deletion of ' + player.firstname + " " + player.lastname +
+            userinput = input('     > Please confirm deletion of ' + player.firstname + " " + player.lastname +
                               '? Y(es) or N(o)')
             userinput = str(userinput).lower()
             if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o':
@@ -46,7 +46,7 @@ class PlayersListView:
     def prompt_for_player_rank_update(self, player):
         """Prompt for update player rank"""
         try:
-            rank = int(input("New rank value for " + player.firstname + " " + player.lastname + " :"))
+            rank = int(input("     > New rank value for " + player.firstname + " " + player.lastname + " :"))
             if rank > 0:
                 print('Success. Rank updated')
                 return rank

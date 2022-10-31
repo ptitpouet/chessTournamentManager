@@ -20,10 +20,10 @@ class ReportView:
         def print_option(option):
             print('--> '+ str(option))
 
-        print("What do you want to do?")
+        print("     > What do you want to do?")
         print_menu()
         try:
-            option = int(input('Enter your choice: '))
+            option = int(input('     > Enter your choice: '))
         except:
             print('Wrong input. Please enter a number ...')
         if option >= 1 or option <= 3:

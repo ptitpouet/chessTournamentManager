@@ -19,7 +19,7 @@ class TournamentsListView:
     def prompt_for_tournament_id(self, length):
         """Prompt for Tournament id in list"""
         try:
-            user_input = int(input("Enter the Tournament id in the list: "))
+            user_input = int(input("     > Enter the Tournament id in the list: "))
             if 0 < user_input <= length:
                 return user_input
             else:
@@ -32,7 +32,7 @@ class TournamentsListView:
 
     def prompt_for_tournament_deletion_confirmation(self, tournament):
         try:
-            userinput = input('Please confirm deletion of ' + tournament.name + '? Y(es) or N(o)')
+            userinput = input('     > Confirm deletion of ' + tournament.name + '? Y(es) or N(o)')
             userinput = str(userinput).lower()
             if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o':
                 return True
@@ -53,7 +53,7 @@ class TournamentsListView:
 
         print_menu()
         try:
-            user_choice = int(input('Enter your choice: '))
+            user_choice = int(input('     > Enter your choice: '))
         except:
             print('!!! Wrong input. Please enter a number between 1 and ' + str(len(OPTIONS) + 1))
 

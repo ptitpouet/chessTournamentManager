@@ -10,7 +10,7 @@ class TournamentCreationView:
     def prompt_for_tournament_name(self):
         """Prompt for the tournament's name"""
         try:
-            name = input('Enter a name for the Tournament: ')
+            name = input('     > Enter a name for the Tournament: ')
             return name
         except:
             print('Wrong input. Please retry...')
@@ -18,7 +18,7 @@ class TournamentCreationView:
     def prompt_for_tournament_location(self):
         """Prompt for the tournament location"""
         try:
-            location_name = input('Enter the location: ')
+            location_name = input('     > Enter the location: ')
             return location_name
         except:
             print('Wrong input. Please retry...')
@@ -26,7 +26,7 @@ class TournamentCreationView:
     def prompt_for_tournament_date(self):
         """Prompt for the tournament date"""
         try:
-            date = input('Enter the date (yyyy-mm-dd): ')
+            date = input('     > Enter the date (yyyy-mm-dd): ')
             return date
         except:
             print('Wrong input. Please retry...')
@@ -34,7 +34,7 @@ class TournamentCreationView:
     def prompt_for_tournament_nb_of_rounds(self):
         """Prompt for the player rank"""
         try:
-            nbofrounds = int(input("Number of rounds: "))
+            nbofrounds = int(input("     > Enter the number of rounds: "))
             return nbofrounds
         except:
             print('Wrong input. Please retry...')
@@ -42,7 +42,7 @@ class TournamentCreationView:
     def prompt_for_tournament_description(self):
         """Prompt for the tournament description"""
         try:
-            description = input('Enter the description: ')
+            description = input('     > Enter the description: ')
             return description
         except:
             print('Wrong input. Please retry...')
@@ -55,7 +55,7 @@ class TournamentCreationView:
                 print(TIME_CONTROL.index(value), '--', value)
         print_menu()
         try:
-            user_choice = int(input('Enter what Time Control: '))
+            user_choice = int(input('     > Enter what Time Control Mode: '))
         except:
             print('Wrong input. Please enter a number ...')
         return user_choice
@@ -64,7 +64,7 @@ class TournamentCreationView:
         """Prompt for load the newly created Tournament"""
         try:
             print("Tournament successfully created and added to the database")
-            userinput = input('Do you want to launch this Tournament ? Y(es) / N(o)')
+            userinput = input('     > Do you want to launch this Tournament ? Y(es) / N(o)')
             userinput = str(userinput).lower()
             if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o':
                 return True

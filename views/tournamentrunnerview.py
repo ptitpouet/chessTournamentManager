@@ -15,7 +15,7 @@ class TournamentRunnerView:
     def prompt_for_player_id(self, length):
         """Prompt for Player id in list"""
         try:
-            user_input = int(input("Enter the Player id to add to the Tournament: "))
+            user_input = int(input("     > Enter the Player id to add to the Tournament: "))
             if 0 < user_input <= length:
                 return user_input
             else:
@@ -28,7 +28,7 @@ class TournamentRunnerView:
 
     def prompt_for_add_another_player(self):
         try:
-            userinput = input('Add another player Y(es) or N(o)')
+            userinput = input('     > Add another player Y(es) or N(o)')
             userinput = str(userinput).lower()
             if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o':
                 return True

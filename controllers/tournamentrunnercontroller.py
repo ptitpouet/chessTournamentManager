@@ -26,6 +26,9 @@ class TournamentRunnerController:
     def initial_check_tournament(self, tournament):
         if tournament.attendees is None or len(tournament.attendees) == 0:
             self.add_players_in_attendees_list(None)
+            #self.db.update_tournament_in_database
+
+
 
     def display_players_list(self, players_list):
         '''Return a list, in case we sort the list'''
