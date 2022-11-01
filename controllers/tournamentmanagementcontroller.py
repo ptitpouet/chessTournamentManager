@@ -42,13 +42,15 @@ class TournamentManagementController:
             index_tournament_id = tournament_id - 1
             return tournaments_list[index_tournament_id]
 
-    def launch_tournament(self, tournaments_list):
-        self.display_tournaments_list()
-        tournament = self.select_tournament(tournaments_list)
-
+    def run_tournament(self, tournament):
         self.view = TournamentRunnerView()
         tournament_runner_controller = TournamentRunnerController(self.view, tournament, self.db)
         tournament_runner_controller.run()
+
+    def launcher_tournament(self, tournaments_list):
+        self.display_tournaments_list()
+        tournament = self.select_tournament(tournaments_list)
+        self.run_tournament(tournament)
 
     def display_tournaments_list(self):
         self.view = TournamentsListView()
@@ -64,7 +66,7 @@ class TournamentManagementController:
         if len(tournaments_list) > 0:
             option = self.view.prompt_for_list_interaction()
             if option == 1:
-                self.launch_tournament(tournaments_list)
+                self.launcher_tournament(tournaments_list)
             elif option == 2:
                 self.create_tournament()
                 self.display_tournament_menu()
@@ -93,7 +95,7 @@ class TournamentManagementController:
                 tournaments_list.pop(index_tournament_id)
 
             self.db.save_tournaments_list_in_database(tournaments_list)
-            self.display_tournaments_list(tournaments_list)
+            self.display_tournaments_list()
         else:
             self.display_tournaments_list_options(tournaments_list)
 
@@ -158,7 +160,7 @@ class TournamentManagementController:
         self.db.save_tournaments_list_in_database(tournaments_list)
 
         if self.view.prompt_for_load_created_tournament():
-            self.launch_tournament(tournament)
+            self.run_tournament(tournament)
         else:
             self.display_tournament_menu()
 

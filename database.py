@@ -64,6 +64,19 @@ class Database:
 
         return tournaments_list
 
+    def update_tournament_in_database(self, tournament_updated):
+        '''Load the tournaments in database, select the one and update'''
+        tournaments_list = self.load_tournaments_list_from_database()
+        i=0
+        for tournament in tournaments_list:
+            if tournament.name == tournament_updated.name \
+                    and tournament.date == tournament_updated.date \
+                    and tournament.location == tournament_updated.location:
+                tournaments_list[i] = tournament_updated
+                break
+            i += 1
+        self.save_tournaments_list_in_database(tournaments_list)
+
     def save_players_list_in_database(self, players_list_to_save):
         def get_serialized_players_list(players_list_to_serialize):
             serialized_players_list = []

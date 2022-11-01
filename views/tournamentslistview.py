@@ -35,6 +35,7 @@ class TournamentsListView:
             userinput = input('     > Confirm deletion of ' + tournament.name + '? Y(es) / N(o)')
             userinput = str(userinput).lower()
             if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o':
+                print('     > ' + tournament.name + " has been deleted")
                 return True
             elif userinput == 'n' or userinput == 'no' or userinput == 'non' or userinput == '':
                 return False

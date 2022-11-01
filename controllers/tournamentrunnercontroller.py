@@ -16,19 +16,53 @@ class TournamentRunnerController:
 
     def run(self):
         self.view.show_welcome()
-        self.initial_check_tournament(self.tournament)
+        self.initial_check_for_attendees(self.tournament)
         print(self.tournament.attendees)
+
+        #print(self.create_matches_of_round(self.tournament, True))
+        #print(self.create_matches_of_round(self.tournament, False))
 
     def back_home(self):
         self.view = HomeView()
         self.run()
 
-    def initial_check_tournament(self, tournament):
+    def create_matches_of_round(self, tournament, is_first_tour):
+        def sort_players_by_score_then_rank(players_list):
+            """ Sort method by score, then rank, then birthday"""
+            return sorted(players_list, key=attrgetter('score', 'rank', 'birthday'), reverse=True)
+
+        def generate_first_tour_matches_pairs(sorted_list):
+            """On the 1st round, the list is split in 2 half. 1st player of the first half play with first of 2nd"""
+            matches = []
+            for i in range(0, int(len(sorted_list) / 2), 1):
+                matches.append(Match(sorted_list[i], sorted_list[i + int(len(sorted_list) / 2)]))
+            return matches
+
+        def generate_following_tour_matches_pairs(sorted_list):
+            """On the 2nd and following rounds, players play against each other, based on their current score"""
+            matches = []
+            while len(sorted_list) >= 2:
+                #print("in the while")
+                for j in range(1, len(sorted_list), 1):
+                    #print(j)
+                    #print(sorted_list[j].opponent_list)
+                    if sorted_list[0] not in sorted_list[j].opponent_list:
+                        matches.append(Match(sorted_list[0], sorted_list[j]))
+                        sorted_list.pop(j)
+                        sorted_list.pop(0)
+                        break
+            return matches
+
+        sorted_list = sort_players_by_score_then_rank(tournament.attendees)
+        if is_first_tour:
+            return generate_first_tour_matches_pairs(sorted_list)
+        else:
+            return generate_following_tour_matches_pairs(sorted_list)
+
+    def initial_check_for_attendees(self, tournament):
         if tournament.attendees is None or len(tournament.attendees) == 0:
             self.add_players_in_attendees_list(None)
-            #self.db.update_tournament_in_database
-
-
+            #self.db.update_tournament_in_database(tournament)
 
     def display_players_list(self, players_list):
         '''Return a list, in case we sort the list'''
@@ -36,13 +70,14 @@ class TournamentRunnerController:
         for player in players_list:
             i += 1
             self.view.display_player(i, player)
-        return players_list
 
     def add_players_in_attendees_list(self, players_list):
+        '''are we on the first attempt of the loop'''
         if players_list is None or len(players_list) == 0:
             players_list = self.db.load_players_list_from_database()
 
-        players_list = self.display_players_list(players_list)
+        self.display_players_list(players_list)
+        '''refresh the players list to delete the user added'''
         players_list = self.add_attendees_in_list(players_list)
 
         if self.view.prompt_for_add_another_player():
@@ -64,35 +99,3 @@ class TournamentRunnerController:
             else:
                 self.select_player(all_players_list)
 
-    # méthode de tri des joueurs
-    def generate_match_pairs_with_swiss_system(self, players_list, isFirstTour):
-        def sort_players_by_score_then_rank(players_list):
-            return sorted(players_list, key=attrgetter('score', 'rank', 'birthday'), reverse=True)
-
-        def generate_first_tour_matches_pairs(sorted_list):
-            matches = []
-            for i in range(0, int(len(sorted_list) / 2), 1):
-                matches.append(Match(sorted_list[i], sorted_list[i + int(len(sorted_list) / 2)]))
-            return matches
-
-        def generate_following_tour_matches_pairs(sorted_list):
-            matches = []
-            while len(sorted_list) >= 2:
-                print("in the while")
-                for j in range(1, len(sorted_list), 1):
-                    print(j)
-                    print(sorted_list[j].opponent_list.name)
-                    if sorted_list[0] not in sorted_list[j].opponent_list:
-                        matches.append(Match(sorted_list[0], sorted_list[j]))
-                        sorted_list.pop(j)
-                        sorted_list.pop(0)
-                        break
-                    else:
-                        print("else")
-            return matches
-
-        sorted_list = sort_players_by_score_then_rank(players_list)
-        if isFirstTour:
-            return generate_first_tour_matches_pairs(sorted_list)
-        else:
-            return generate_following_tour_matches_pairs(sorted_list)

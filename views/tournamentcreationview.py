@@ -63,7 +63,7 @@ class TournamentCreationView:
     def prompt_for_load_created_tournament(self):
         """Prompt for load the newly created Tournament"""
         try:
-            print("Tournament successfully created and added to the database")
+            print('     > Tournament successfully created and added to the database')
             userinput = input('     > Do you want to launch this Tournament ? Y(es)[default] / N(o)')
             userinput = str(userinput).lower()
             if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o' or userinput == '':
