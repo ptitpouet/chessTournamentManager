@@ -17,19 +17,29 @@ class TournamentRunnerController:
     def run(self):
         self.view.show_welcome()
         self.initial_check_for_attendees(self.tournament)
-        print(self.tournament.attendees)
+        self.view.display_tournament_details(self.tournament)
+        self.view.display_tournament_players(self.sort_players_by_alphabet_order(self.tournament.attendees))
 
-        #print(self.create_matches_of_round(self.tournament, True))
-        #print(self.create_matches_of_round(self.tournament, False))
+        matches = (self.create_matches_of_round(self.tournament, True))
+
+        for match in matches:
+            print(str(match))
+
+        # print(self.create_matches_of_round(self.tournament, False))
 
     def back_home(self):
         self.view = HomeView()
         self.run()
 
+    def sort_players_by_alphabet_order(self, players_list):
+        """ Sort method by score, then rank, then birthday"""
+        return sorted(players_list, key=attrgetter('lastname', 'firstname', 'birthday'), reverse=True)
+
+    def sort_players_by_score_then_rank(self, players_list):
+        """ Sort method by score, then rank, then birthday"""
+        return sorted(players_list, key=attrgetter('score', 'rank', 'birthday'), reverse=True)
+
     def create_matches_of_round(self, tournament, is_first_tour):
-        def sort_players_by_score_then_rank(players_list):
-            """ Sort method by score, then rank, then birthday"""
-            return sorted(players_list, key=attrgetter('score', 'rank', 'birthday'), reverse=True)
 
         def generate_first_tour_matches_pairs(sorted_list):
             """On the 1st round, the list is split in 2 half. 1st player of the first half play with first of 2nd"""
@@ -42,10 +52,10 @@ class TournamentRunnerController:
             """On the 2nd and following rounds, players play against each other, based on their current score"""
             matches = []
             while len(sorted_list) >= 2:
-                #print("in the while")
+                # print("in the while")
                 for j in range(1, len(sorted_list), 1):
-                    #print(j)
-                    #print(sorted_list[j].opponent_list)
+                    # print(j)
+                    # print(sorted_list[j].opponent_list)
                     if sorted_list[0] not in sorted_list[j].opponent_list:
                         matches.append(Match(sorted_list[0], sorted_list[j]))
                         sorted_list.pop(j)
@@ -53,7 +63,7 @@ class TournamentRunnerController:
                         break
             return matches
 
-        sorted_list = sort_players_by_score_then_rank(tournament.attendees)
+        sorted_list = self.sort_players_by_score_then_rank(tournament.attendees)
         if is_first_tour:
             return generate_first_tour_matches_pairs(sorted_list)
         else:
@@ -62,14 +72,14 @@ class TournamentRunnerController:
     def initial_check_for_attendees(self, tournament):
         if tournament.attendees is None or len(tournament.attendees) == 0:
             self.add_players_in_attendees_list(None)
-            #self.db.update_tournament_in_database(tournament)
+            # self.db.update_tournament_in_database(tournament)
 
     def display_players_list(self, players_list):
         '''Return a list, in case we sort the list'''
         i = 0
         for player in players_list:
             i += 1
-            self.view.display_player(i, player)
+            self.view.display_player_to_pick(i, player)
 
     def add_players_in_attendees_list(self, players_list):
         '''are we on the first attempt of the loop'''
@@ -98,4 +108,3 @@ class TournamentRunnerController:
                 return index_player_id
             else:
                 self.select_player(all_players_list)
-

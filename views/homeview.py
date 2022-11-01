@@ -1,5 +1,5 @@
 OPTIONS = (
-    'Tournament Management',
+    '|| Tournament ||',
     'Players administration',
     'Reports',
     '< Exit >'

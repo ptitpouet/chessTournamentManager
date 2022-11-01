@@ -1,14 +1,26 @@
 from models.player import GENDER
+from models.tournament import TIME_CONTROL
 
 
 class TournamentRunnerView:
 
     def show_welcome(self):
         """Welcome the user"""
-        print('         ~~ Tournament START ~~         ')
+        print('        ~~ Tournament LAUNCH ~~         ')
         print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
 
-    def display_player(self, i, player):
+    def display_tournament_details(self, tournament):
+        print(tournament.name + ' (' + tournament.date + ' : ' + tournament.location + ')')
+        print(tournament.description)
+        print(str(tournament.nb_of_rounds) + ' rounds' + ' | ' + TIME_CONTROL[tournament.time_control])
+
+    def display_tournament_players(self, attendees):
+        print("TOURNAMENT Attendees:")
+        for attendee in attendees:
+            print(attendee.firstname + ' ' + attendee.lastname + ' (' \
+                  + GENDER[attendee.gender] + '|' + attendee.birthday + ')')
+
+    def display_player_to_pick(self, i, player):
         print(str(i) + "| " + player.firstname + ' ' + player.lastname
               + ' (' + GENDER[player.gender] + '|' + player.birthday + ')')
 
