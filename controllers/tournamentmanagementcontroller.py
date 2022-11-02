@@ -77,13 +77,14 @@ class TournamentManagementController:
                 self.reset_tournaments_database()
             elif option == 5:
                 self.display_tournament_menu()
+                self.display_tournament_menu()
             else:
                 self.display_tournament_menu()
         else:
             self.display_tournament_menu()
 
     def reset_tournaments_database(self):
-        pass
+        self.db.reset_tournaments_table()
 
     def delete_tournament(self):
         tournaments_list = self.display_tournaments_list()
@@ -103,7 +104,7 @@ class TournamentManagementController:
         self.view = TournamentCreationView()
         self.view.show_welcome()
 
-        tournaments_list = self.db.load_tournaments_list_from_database()
+        #tournaments_list = self.db.load_tournaments_list_from_database()
 
         def get_name():
             name = self.view.prompt_for_tournament_name()
@@ -155,9 +156,9 @@ class TournamentManagementController:
             get_description(),
             get_time_control()
         )
-        tournaments_list.append(tournament)
+        #tournaments_list.append(tournament)
 
-        self.db.save_tournaments_list_in_database(tournaments_list)
+        self.db.insert_tournament_in_database(tournament)
 
         if self.view.prompt_for_load_created_tournament():
             self.run_tournament(tournament)

@@ -58,6 +58,7 @@ class PlayersController:
                 self.display_player_menu()
             elif option == 4:
                 self.reset_players_database()
+                self.display_player_menu()
             elif option == 5:
                 self.display_player_menu()
             else:
@@ -66,7 +67,7 @@ class PlayersController:
             self.display_player_menu()
 
     def reset_players_database(self):
-        pass
+        self.db.reset_players_table()
 
     def delete_player(self, players_list):
         players_list = self.display_players_list()
@@ -75,9 +76,12 @@ class PlayersController:
             index_player_id = player_id - 1
 
             if self.view.prompt_for_player_deletion_confirmation(players_list[index_player_id]):
-                players_list.pop(index_player_id)
+                pass
+                #players_list.pop(index_player_id)
 
-            self.db.save_players_list_in_database(players_list)
+            print("This is a simulated call to action")
+            #self.db.save_players_list_in_database(players_list)
+
             self.display_players_list_options()
         else:
             self.display_players_list_options(players_list)
@@ -92,7 +96,7 @@ class PlayersController:
             players_list[player_id].rank = new_rank
 
             self.db.save_players_list_in_database(players_list)
-            self.display_players_list_options()
+            self.display_players_list_options(players_list)
         else:
             self.display_players_list_options(players_list)
 
@@ -100,7 +104,7 @@ class PlayersController:
         self.view = PlayersCreationView()
         self.view.show_welcome()
 
-        players_list = self.db.load_players_list_from_database()
+        #players_list = self.db.load_players_list_from_database()
 
         def get_last_name():
             last_name = self.view.prompt_for_last_name()
@@ -137,13 +141,11 @@ class PlayersController:
             else:
                 return rank
 
-        players_list.append(Player(get_last_name(), get_first_name(), get_birthday(), get_gender(), get_rank()))
+        player = Player(get_last_name(), get_first_name(), get_birthday(), get_gender(), get_rank())
 
-        self.db.save_players_list_in_database(players_list)
+        self.db.insert_player_in_database(player)
 
         if self.view.prompt_for_another_player():
             self.create_player()
         else:
             self.display_player_menu()
-
-

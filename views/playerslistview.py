@@ -1,8 +1,8 @@
 OPTIONS = (
     'Add a new Player',
     'Update a Player Rank',
-    'Delete a Player from database',
-    'Reset all',
+    '[!]Delete a Player from database',
+    'Reset database',
     '<- back'
 )
 

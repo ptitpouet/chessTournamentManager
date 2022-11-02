@@ -27,17 +27,31 @@ class Tournament:
         """Used in print."""
         return str(self)
 
+    def get_serialized_players_list(self, attendees):
+        serialized_players = []
+        if attendees is not None and len(attendees) > 0:
+            for attendee in attendees:
+                serialized_players.append(attendee.serialize())
+        return serialized_players
+
+    def get_serialized_rounds_list(self, rounds):
+        serialized_rounds = []
+        if rounds is not None and len(rounds) > 0:
+            for round in rounds:
+                serialized_rounds.append(round.serialize())
+        return serialized_rounds
+
     def serialize(self):
         serialized_tournament = {
-            'name' : self.name,
-            'location' : self.location,
-            'date' : self.date,
-            'nb_of_rounds' : self.nb_of_rounds,
-            'description' : self.description,
-            'time_control' : self.time_control,
-            'attendees' : self.attendees,
-            'rounds' : self.rounds,
-            'is_finished' : self.is_finished
+            'name': self.name,
+            'location': self.location,
+            'date': self.date,
+            'nb_of_rounds': self.nb_of_rounds,
+            'description': self.description,
+            'time_control': self.time_control,
+            'attendees': self.get_serialized_players_list(self.attendees),
+            'rounds': self.get_serialized_rounds_list(self.rounds),
+            'is_finished': self.is_finished
         }
         return serialized_tournament
 
