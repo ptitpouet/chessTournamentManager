@@ -30,7 +30,8 @@ class TournamentManagementController:
 
     def back_home(self):
         self.view = HomeView()
-        self.run()
+        #home_controller = HomeController(self.view, self.db)
+        #home_controller.run()
 
     def display_tournament_menu(self):
         self.view = TournamentMenuView()

@@ -28,7 +28,8 @@ class PlayersController:
 
     def back_home(self):
         self.view = HomeView()
-        self.run()
+        #home_controller = HomeController(self.view, self.db)
+        #home_controller.run()
 
     def display_player_menu(self):
         self.view = PlayersMenuView()

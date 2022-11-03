@@ -6,8 +6,9 @@ class TournamentRunnerView:
 
     def show_welcome(self):
         """Welcome the user"""
-        print('        ~~ Tournament LAUNCH ~~         ')
-        print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
+        print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
+        print('                                         ~~ Tournament LAUNCH ~~                                       ')
+        print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
 
     def display_tournament_details(self, tournament):
         print(tournament.name + ' (' + tournament.date + ' : ' + tournament.location + ')')
@@ -15,14 +16,19 @@ class TournamentRunnerView:
         print(str(tournament.nb_of_rounds) + ' rounds' + ' | ' + TIME_CONTROL[tournament.time_control])
 
     def display_tournament_players(self, attendees):
-        print("TOURNAMENT Attendees:")
+        print("-------------------------------------------------------------------------------------------------------")
         for attendee in attendees:
-            print(attendee.firstname + ' ' + attendee.lastname + ' (' \
+            print("|" + attendee.firstname + ' ' + attendee.lastname + ' (' \
                   + GENDER[attendee.gender] + '|' + attendee.birthday + ')')
+        print("-------------------------------------------------------------------------------------------------------")
 
     def display_player_to_pick(self, i, player):
         print(str(i) + "| " + player.firstname + ' ' + player.lastname
               + ' (' + GENDER[player.gender] + '|' + player.birthday + ')')
+
+    def display_warning_no_players(self):
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("Players database empty. You need to add players first")
 
     def prompt_for_player_id(self, length):
         """Prompt for Player id in list"""

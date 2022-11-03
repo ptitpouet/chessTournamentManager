@@ -11,23 +11,23 @@ class HomeController:
     def __init__(self, view, database):
         # views
         self.view = view
-        self.database = database
+        self.db = database
 
     def run(self):
         self.view.show_welcome()
         option = self.view.prompt_for_section()
 
         if option == 1:
-            tournament_view = TournamentMenuView()
-            tournament_management_controller = TournamentManagementController(tournament_view, self.database)
+            self.view = TournamentMenuView()
+            tournament_management_controller = TournamentManagementController(self.view, self.db)
             tournament_management_controller.run()
         elif option == 2:
-            players_view = PlayersMenuView()
-            players_controller = PlayersController(players_view, self.database)
+            self.view = PlayersMenuView()
+            players_controller = PlayersController(self.view, self.db)
             players_controller.run()
         elif option == 3:
-            report_view = ReportView()
-            report_controller = ReportController(report_view)
+            self.view = ReportView()
+            report_controller = ReportController(self.view)
             report_controller.run()
         elif option == 4:
             quit()

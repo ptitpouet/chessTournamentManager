@@ -1,15 +1,13 @@
 class Match:
     def __init__(self, white_player, black_player):
         self.white_player = white_player
-        self.white_player.opponent_list.append(black_player)
         self.black_player = black_player
-        self.black_player.opponent_list.append(white_player)
         self.result = ()
 
     def __str__(self):
         """Used in print."""
-        return f"{self.white_player.lastname} {self.white_player.firstname} ({self.white_player.birthday}) " \
-               f"vs {self.black_player.lastname} {self.black_player.firstname} ({self.black_player.birthday})"
+        return f"{self.white_player.firstname} {self.white_player.lastname} ({self.white_player.birthday}) " \
+               f"  VS  {self.black_player.firstname} {self.black_player.lastname} ({self.black_player.birthday})"
 
     def __repr__(self):
         """Used in print."""
@@ -48,6 +46,3 @@ class Match:
 
         self.result = ([self.white_player, white_player_match_score], [self.black_player, black_player_match_score])
         return self.result
-
-
-

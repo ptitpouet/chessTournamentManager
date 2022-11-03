@@ -83,6 +83,10 @@ class Database:
     def reset_tournaments_table(self):
         self.reset_table_database(tournaments_table_name)
 
+    def insert_player_in_database(self, player):
+        self.add_object_in_database(players_table_name, player.serialize())
+
+
     def save_players_list_in_database(self, players_list_to_save):
         def get_serialized_players_list(players_list_to_serialize):
             serialized_players_list = []

@@ -1,9 +1,14 @@
+from controllers.playerscontroller import PlayersController
 from models.match import Match
 from models.player import Player
+import time
+from models.round import Round
 from views.homeview import HomeView
 from operator import attrgetter
 from random import randint
 from datetime import datetime
+
+from views.playersmenuview import PlayersMenuView
 
 
 class TournamentRunnerController:
@@ -20,16 +25,24 @@ class TournamentRunnerController:
         self.view.display_tournament_details(self.tournament)
         self.view.display_tournament_players(self.sort_players_by_alphabet_order(self.tournament.attendees))
 
-        matches = (self.create_matches_of_round(self.tournament, True))
-
-        for match in matches:
-            print(str(match))
+        for i in range(self.tournament.nb_of_rounds):
+            matches = (self.create_matches_of_round(self.tournament))
+            current_round = self.run_round("Round " + str(i), matches)
+            current_round.matches = matches
+            self.tournament.rounds.append(current_round)
 
         # print(self.create_matches_of_round(self.tournament, False))
 
-    def back_home(self):
-        self.view = HomeView()
-        self.run()
+    def run_round(self, name, matches):
+        newround = Round(name, time.time(), matches)
+        for match in matches:
+            print(str(match))
+        return newround
+
+    def back_to_player_management(self):
+        self.view = PlayersMenuView()
+        players_controller = PlayersController(self.view, self.db)
+        players_controller.run()
 
     def sort_players_by_alphabet_order(self, players_list):
         """ Sort method by score, then rank, then birthday"""
@@ -39,7 +52,7 @@ class TournamentRunnerController:
         """ Sort method by score, then rank, then birthday"""
         return sorted(players_list, key=attrgetter('score', 'rank', 'birthday'), reverse=True)
 
-    def create_matches_of_round(self, tournament, is_first_tour):
+    def create_matches_of_round(self, tournament):
 
         def generate_first_tour_matches_pairs(sorted_list):
             """On the 1st round, the list is split in 2 half. 1st player of the first half play with first of 2nd"""
@@ -50,21 +63,34 @@ class TournamentRunnerController:
 
         def generate_following_tour_matches_pairs(sorted_list):
             """On the 2nd and following rounds, players play against each other, based on their current score"""
+
+            def has_players_already_played(tournament, player, opponent):
+                has_already_played = False
+                for round in tournament.rounds:
+                    for match in round.matches:
+                        if match.white_player == player and match.black_player == opponent:
+                            has_already_played = True
+                        elif match.black_player == player and match.white_player == opponent:
+                            has_already_played = True
+                return has_already_played
+
             matches = []
-            while len(sorted_list) >= 2:
-                # print("in the while")
+            for white_player in sorted_list:
+                print(white_player.firstname + " contre ?")
                 for j in range(1, len(sorted_list), 1):
-                    # print(j)
-                    # print(sorted_list[j].opponent_list)
-                    if sorted_list[0] not in sorted_list[j].opponent_list:
-                        matches.append(Match(sorted_list[0], sorted_list[j]))
+                    print(sorted_list[j].firstname + "?")
+                    if not has_players_already_played(tournament, white_player, sorted_list[j]):
+                        print("n'ont jamais joué ensemble !!")
+                        matches.append(Match(white_player, sorted_list[j]))
                         sorted_list.pop(j)
                         sorted_list.pop(0)
                         break
+
             return matches
 
         sorted_list = self.sort_players_by_score_then_rank(tournament.attendees)
-        if is_first_tour:
+
+        if tournament.rounds is None or len(tournament.rounds) == 0:
             return generate_first_tour_matches_pairs(sorted_list)
         else:
             return generate_following_tour_matches_pairs(sorted_list)
@@ -86,9 +112,13 @@ class TournamentRunnerController:
         if players_list is None or len(players_list) == 0:
             players_list = self.db.load_players_list_from_database()
 
-        self.display_players_list(players_list)
-        '''refresh the players list to delete the user added'''
-        players_list = self.add_attendees_in_list(players_list)
+        if players_list is None or len(players_list) == 0:
+            self.view.display_warning_no_players()
+            self.back_to_player_management()
+        else:
+            self.display_players_list(players_list)
+            '''refresh the players list to delete the user added'''
+            players_list = self.add_attendees_in_list(players_list)
 
         if self.view.prompt_for_add_another_player():
             self.add_players_in_attendees_list(players_list)
