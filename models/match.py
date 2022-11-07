@@ -6,8 +6,11 @@ class Match:
 
     def __str__(self):
         """Used in print."""
-        return f"{self.white_player.firstname} {self.white_player.lastname} ({self.white_player.birthday}) " \
-               f"  VS  {self.black_player.firstname} {self.black_player.lastname} ({self.black_player.birthday})"
+        return f"{self.white_player.firstname} {self.white_player.lastname}" \
+               f" ({self.white_player.birthday}) - {self.white_player.score}" \
+               f"  VS  " \
+               f"{self.black_player.firstname} {self.black_player.lastname}" \
+               f" ({self.black_player.birthday}) - {self.black_player.score}"
 
     def __repr__(self):
         """Used in print."""

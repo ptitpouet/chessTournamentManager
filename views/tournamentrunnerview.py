@@ -12,16 +12,37 @@ class TournamentRunnerView:
         print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
 
     def display_tournament_details(self, tournament):
-        print(tournament.name + ' (' + tournament.date + ' : ' + tournament.location + ')')
+        print(tournament.name + ' (' + tournament.date + ' : ' + tournament.location + ')' +
+              str(tournament.nb_of_rounds) + ' rounds' + ' | ' +
+              TIME_CONTROL[tournament.time_control])
         print(tournament.description)
-        print(str(tournament.nb_of_rounds) + ' rounds' + ' | ' + TIME_CONTROL[tournament.time_control])
+
+    def display_round_details(self, starting_round):
+        print("-------------------------------------------------------------------------------------------------------")
+        print(str(starting_round.name))
+        for match in starting_round.matches:
+            print(str(match))
+        print("-------------------------------------------------------------------------------------------------------")
+
+    def prompt_for_match_result(self, match):
+        print(str(match))
+        print("     0 | " + "-- Draw Match --")
+        print("     1 | " + match.white_player.firstname + ' ' + match.white_player.lastname)
+        print("     2 | " + match.black_player.firstname + ' ' + match.black_player.lastname)
+
+        try:
+            return int(input("Select the winner ( 1 | 2 ) or Draw ( 0 ): "))
+        except:
+            print("!!! Error. Enter '1' or '2'")
+            return -1
 
     def display_tournament_players(self, attendees):
         print("-------------------------------------------------------------------------------------------------------")
+        print("Players List:")
         for attendee in attendees:
             print("|" + attendee.lastname + ' ' + attendee.firstname + ' (' \
-                    + GENDER[attendee.gender] + '|' + attendee.birthday + ') - ' \
-                    + str(attendee.rank))
+                  + GENDER[attendee.gender] + '|' + attendee.birthday + ') - ' \
+                  + str(attendee.rank))
         print("-------------------------------------------------------------------------------------------------------")
 
     def display_player_to_pick(self, i, player):

@@ -27,18 +27,35 @@ class TournamentRunnerController:
 
         for i in range(self.tournament.nb_of_rounds):
             matches = (self.create_matches_of_round(self.tournament))
-            current_round = self.run_round("Round " + str(i), matches)
-            current_round.matches = matches
+            current_round = self.run_round("Round " + str(i + 1), matches)
             self.tournament.rounds.append(current_round)
 
-        # print(self.create_matches_of_round(self.tournament, False))
+        self.display_tournament_results(self.tournament)
+
+    def display_tournament_results(self, tournament):
+        for round in tournament.rounds:
+            for match in round.matches:
+                print(str(match.result))
+        for attendee in tournament.attendees:
+            print(attendee.firstname + " " + str(attendee.score))
 
     def run_round(self, name, matches):
         new_round = Round(name, time.time(), matches)
-        print(str(new_round))
-        for match in matches:
-            print(name + '|' + str(match))
+        self.view.display_round_details(new_round)
+        for match in new_round.matches:
+            self.collect_match_winner(match)
         return new_round
+
+    def collect_match_winner(self, match):
+        winner_input = self.view.prompt_for_match_result(match)
+        if winner_input == 0:
+            match.update_score(None)
+        elif winner_input == 1:
+            match.update_score(match.white_player)
+        elif winner_input == 2:
+            match.update_score(match.black_player)
+        else:
+            self.collect_match_winner(match)
 
     def back_to_player_management(self):
         self.view = PlayersMenuView()
@@ -47,11 +64,11 @@ class TournamentRunnerController:
 
     def sort_players_by_alphabet_order(self, players_list):
         """ Sort method by score, then rank, then birthday"""
-        return sorted(players_list, key=attrgetter('lastname', 'firstname', 'birthday'), reverse=True)
+        return sorted(players_list, key=attrgetter('lastname', 'firstname', 'birthday'))
 
     def sort_players_by_score_then_rank(self, players_list):
         """ Sort method by score, then rank, then birthday"""
-        return sorted(players_list, key=attrgetter('score', 'rank', 'birthday'), reverse=True)
+        return sorted(players_list, key=lambda obj: (-obj.score, obj.rank))
 
     def create_matches_of_round(self, tournament):
         def generate_first_tour_matches_pairs(first_sorted_list):
@@ -60,6 +77,7 @@ class TournamentRunnerController:
             for i in range(0, int(len(first_sorted_list) / 2), 1):
                 matches.append(Match(first_sorted_list[i], first_sorted_list[i + int(len(first_sorted_list) / 2)]))
             return matches
+
         def generate_following_tour_matches_pairs(following_sorted_list):
             """On the 2nd and following rounds, players play against each other, based on their current score"""
             def has_players_already_played(tournament_to_check, player, opponent):
@@ -71,19 +89,20 @@ class TournamentRunnerController:
                         elif current_match.black_player == player and current_match.white_player == opponent:
                             has_already_played = True
                 return has_already_played
+
             def loop_the_players_list_for_a_match(remaining_sorted_list):
-                for j in range(1, len(following_sorted_list), 1):
-                    if not has_players_already_played(tournament, following_sorted_list[0],
-                                                      following_sorted_list[j]):
-                        matches.append(Match(following_sorted_list[0], following_sorted_list[j]))
-                        following_sorted_list.pop(j)
-                        following_sorted_list.pop(0)
-                        return following_sorted_list
+                for j in range(1, len(remaining_sorted_list), 1):
+                    if not has_players_already_played(tournament, remaining_sorted_list[0],
+                                                      remaining_sorted_list[j]):
+                        matches.append(Match(remaining_sorted_list[0], remaining_sorted_list[j]))
+                        remaining_sorted_list.pop(j)
+                        remaining_sorted_list.pop(0)
+                        return remaining_sorted_list
                 '''Outside the loop'''
-                matches.append(Match(following_sorted_list[0], following_sorted_list[1]))
-                following_sorted_list.pop(1)
-                following_sorted_list.pop(0)
-                return following_sorted_list
+                matches.append(Match(remaining_sorted_list[0], remaining_sorted_list[1]))
+                remaining_sorted_list.pop(1)
+                remaining_sorted_list.pop(0)
+                return remaining_sorted_list
 
             matches = []
             while len(following_sorted_list) >= 2:

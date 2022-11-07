@@ -5,7 +5,7 @@ class Round:
         self.name = name
         self.start = start
         self.end = None
-        self.matches = []
+        self.matches = matches
 
     def close_round(self, end, matches):
         self.end = end
