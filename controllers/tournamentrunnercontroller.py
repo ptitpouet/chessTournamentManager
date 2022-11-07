@@ -23,7 +23,7 @@ class TournamentRunnerController:
         self.view.show_welcome()
         self.initial_check_for_attendees(self.tournament)
         self.view.display_tournament_details(self.tournament)
-        self.view.display_tournament_players(self.sort_players_by_alphabet_order(self.tournament.attendees))
+        self.view.display_tournament_players(self.sort_players_by_score_then_rank(self.tournament.attendees))
 
         for i in range(self.tournament.nb_of_rounds):
             matches = (self.create_matches_of_round(self.tournament))
@@ -34,10 +34,11 @@ class TournamentRunnerController:
         # print(self.create_matches_of_round(self.tournament, False))
 
     def run_round(self, name, matches):
-        newround = Round(name, time.time(), matches)
+        new_round = Round(name, time.time(), matches)
+        print(str(new_round))
         for match in matches:
-            print(str(match))
-        return newround
+            print(name + '|' + str(match))
+        return new_round
 
     def back_to_player_management(self):
         self.view = PlayersMenuView()
@@ -53,43 +54,43 @@ class TournamentRunnerController:
         return sorted(players_list, key=attrgetter('score', 'rank', 'birthday'), reverse=True)
 
     def create_matches_of_round(self, tournament):
-
-        def generate_first_tour_matches_pairs(sorted_list):
+        def generate_first_tour_matches_pairs(first_sorted_list):
             """On the 1st round, the list is split in 2 half. 1st player of the first half play with first of 2nd"""
             matches = []
-            for i in range(0, int(len(sorted_list) / 2), 1):
-                matches.append(Match(sorted_list[i], sorted_list[i + int(len(sorted_list) / 2)]))
+            for i in range(0, int(len(first_sorted_list) / 2), 1):
+                matches.append(Match(first_sorted_list[i], first_sorted_list[i + int(len(first_sorted_list) / 2)]))
             return matches
-
-        def generate_following_tour_matches_pairs(sorted_list):
+        def generate_following_tour_matches_pairs(following_sorted_list):
             """On the 2nd and following rounds, players play against each other, based on their current score"""
-
-            def has_players_already_played(tournament, player, opponent):
+            def has_players_already_played(tournament_to_check, player, opponent):
                 has_already_played = False
-                for round in tournament.rounds:
-                    for match in round.matches:
-                        if match.white_player == player and match.black_player == opponent:
+                for current_round in tournament_to_check.rounds:
+                    for current_match in current_round.matches:
+                        if current_match.white_player == player and current_match.black_player == opponent:
                             has_already_played = True
-                        elif match.black_player == player and match.white_player == opponent:
+                        elif current_match.black_player == player and current_match.white_player == opponent:
                             has_already_played = True
                 return has_already_played
+            def loop_the_players_list_for_a_match(remaining_sorted_list):
+                for j in range(1, len(following_sorted_list), 1):
+                    if not has_players_already_played(tournament, following_sorted_list[0],
+                                                      following_sorted_list[j]):
+                        matches.append(Match(following_sorted_list[0], following_sorted_list[j]))
+                        following_sorted_list.pop(j)
+                        following_sorted_list.pop(0)
+                        return following_sorted_list
+                '''Outside the loop'''
+                matches.append(Match(following_sorted_list[0], following_sorted_list[1]))
+                following_sorted_list.pop(1)
+                following_sorted_list.pop(0)
+                return following_sorted_list
 
             matches = []
-            for white_player in sorted_list:
-                print(white_player.firstname + " contre ?")
-                for j in range(1, len(sorted_list), 1):
-                    print(sorted_list[j].firstname + "?")
-                    if not has_players_already_played(tournament, white_player, sorted_list[j]):
-                        print("n'ont jamais joué ensemble !!")
-                        matches.append(Match(white_player, sorted_list[j]))
-                        sorted_list.pop(j)
-                        sorted_list.pop(0)
-                        break
-
+            while len(following_sorted_list) >= 2:
+                loop_the_players_list_for_a_match(following_sorted_list)
             return matches
 
         sorted_list = self.sort_players_by_score_then_rank(tournament.attendees)
-
         if tournament.rounds is None or len(tournament.rounds) == 0:
             return generate_first_tour_matches_pairs(sorted_list)
         else:

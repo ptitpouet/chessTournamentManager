@@ -4,7 +4,8 @@ from models.tournament import TIME_CONTROL
 
 class TournamentRunnerView:
 
-    def show_welcome(self):
+    @staticmethod
+    def show_welcome():
         """Welcome the user"""
         print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
         print('                                         ~~ Tournament LAUNCH ~~                                       ')
@@ -18,8 +19,9 @@ class TournamentRunnerView:
     def display_tournament_players(self, attendees):
         print("-------------------------------------------------------------------------------------------------------")
         for attendee in attendees:
-            print("|" + attendee.firstname + ' ' + attendee.lastname + ' (' \
-                  + GENDER[attendee.gender] + '|' + attendee.birthday + ')')
+            print("|" + attendee.lastname + ' ' + attendee.firstname + ' (' \
+                    + GENDER[attendee.gender] + '|' + attendee.birthday + ') - ' \
+                    + str(attendee.rank))
         print("-------------------------------------------------------------------------------------------------------")
 
     def display_player_to_pick(self, i, player):

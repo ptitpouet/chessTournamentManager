@@ -1,4 +1,3 @@
-from views.homeview import HomeView
 from views.playerscreationview import PlayersCreationView
 from views.playerslistview import PlayersListView
 from views.playersmenuview import PlayersMenuView
@@ -27,9 +26,10 @@ class PlayersController:
             pass
 
     def back_home(self):
-        self.view = HomeView()
-        #home_controller = HomeController(self.view, self.db)
-        #home_controller.run()
+        pass
+        '''self.view = HomeView()
+        home_controller = HomeController(self.view, self.db)
+        home_controller.run()'''
 
     def display_player_menu(self):
         self.view = PlayersMenuView()

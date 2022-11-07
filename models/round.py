@@ -11,5 +11,9 @@ class Round:
         self.end = end
         self.matches = matches
 
+    def __str__(self):
+        """Used in print."""
+        return f"{self.name} {self.start}"
+
 
 
