@@ -1,8 +1,9 @@
 class Match:
-    def __init__(self, white_player, black_player):
+    def __init__(self, white_player, black_player, is_finished):
         self.white_player = white_player
         self.black_player = black_player
         self.result = ()
+        self.is_finished = is_finished
 
     def __str__(self):
         """Used in print."""
@@ -21,6 +22,7 @@ class Match:
             'white_player': self.white_player,
             'black_player': self.black_player,
             'result': self.result,
+            'is_finished' : self.is_finished
         }
         return serialized_match
 
@@ -48,4 +50,5 @@ class Match:
             black_player_match_score = 0.5
 
         self.result = ([self.white_player, white_player_match_score], [self.black_player, black_player_match_score])
+        self.is_finished = True
         return self.result

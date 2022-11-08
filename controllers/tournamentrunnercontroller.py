@@ -25,35 +25,42 @@ class TournamentRunnerController:
         self.view.display_tournament_details(self.tournament)
         self.view.display_tournament_players(self.sort_players_by_score_then_rank(self.tournament.attendees))
 
-        for i in range(self.tournament.nb_of_rounds):
-            matches = (self.create_matches_of_round(self.tournament))
-            current_round = self.run_round("Round " + str(i + 1), matches)
-            self.tournament.rounds.append(current_round)
+        if self.tournament.rounds is None or len(self.tournament.rounds) == 0 :
+            self.tournament.rounds = self.create_tournament_rounds(self.tournament.nb_of_rounds)
+
+        for i in range(len(self.tournament.rounds)):
+            if not self.tournament.rounds[i].is_finished:
+                self.run_round(i, self.tournament)
 
         self.display_tournament_results(self.tournament)
 
     def display_tournament_results(self, tournament):
-        for round in tournament.rounds:
-            for match in round.matches:
+        for current_round in tournament.rounds:
+            for match in current_round.matches:
                 print(str(match.result))
         for attendee in tournament.attendees:
             print(attendee.firstname + " " + str(attendee.score))
 
-    def run_round(self, name, matches):
-        new_round = Round(name, time.time(), matches)
-        self.view.display_round_details(new_round)
-        for match in new_round.matches:
+    def create_tournament_rounds(self, nb_of_rounds):
+        rounds = []
+        for i in range(nb_of_rounds):
+            rounds.append(Round("Round " + str(i + 1), time.time(), None))
+        return rounds
+
+    def run_round(self, round_position, tournament):
+        tournament.rounds[round_position].matches = (self.create_matches_of_round(round_position, tournament))
+        self.view.display_round_details(tournament.rounds[round_position])
+        for match in tournament.rounds[round_position].matches:
             self.collect_match_winner(match)
-        return new_round
 
     def collect_match_winner(self, match):
         winner_input = self.view.prompt_for_match_result(match)
         if winner_input == 0:
-            match.update_score(None)
+            print(match.update_score(None))
         elif winner_input == 1:
-            match.update_score(match.white_player)
+            print(match.update_score(match.white_player))
         elif winner_input == 2:
-            match.update_score(match.black_player)
+            print(match.update_score(match.black_player))
         else:
             self.collect_match_winner(match)
 
@@ -70,12 +77,12 @@ class TournamentRunnerController:
         """ Sort method by score, then rank, then birthday"""
         return sorted(players_list, key=lambda obj: (-obj.score, obj.rank))
 
-    def create_matches_of_round(self, tournament):
+    def create_matches_of_round(self, round_position, tournament):
         def generate_first_tour_matches_pairs(first_sorted_list):
             """On the 1st round, the list is split in 2 half. 1st player of the first half play with first of 2nd"""
             matches = []
             for i in range(0, int(len(first_sorted_list) / 2), 1):
-                matches.append(Match(first_sorted_list[i], first_sorted_list[i + int(len(first_sorted_list) / 2)]))
+                matches.append(Match(first_sorted_list[i], first_sorted_list[i + int(len(first_sorted_list) / 2)], False))
             return matches
 
         def generate_following_tour_matches_pairs(following_sorted_list):
@@ -83,23 +90,24 @@ class TournamentRunnerController:
             def has_players_already_played(tournament_to_check, player, opponent):
                 has_already_played = False
                 for current_round in tournament_to_check.rounds:
-                    for current_match in current_round.matches:
-                        if current_match.white_player == player and current_match.black_player == opponent:
-                            has_already_played = True
-                        elif current_match.black_player == player and current_match.white_player == opponent:
-                            has_already_played = True
+                    if current_round.matches is not None:
+                        for current_match in current_round.matches:
+                            if current_match.white_player == player and current_match.black_player == opponent:
+                                has_already_played = True
+                            elif current_match.black_player == player and current_match.white_player == opponent:
+                                has_already_played = True
                 return has_already_played
 
             def loop_the_players_list_for_a_match(remaining_sorted_list):
                 for j in range(1, len(remaining_sorted_list), 1):
                     if not has_players_already_played(tournament, remaining_sorted_list[0],
                                                       remaining_sorted_list[j]):
-                        matches.append(Match(remaining_sorted_list[0], remaining_sorted_list[j]))
+                        matches.append(Match(remaining_sorted_list[0], remaining_sorted_list[j], False))
                         remaining_sorted_list.pop(j)
                         remaining_sorted_list.pop(0)
                         return remaining_sorted_list
                 '''Outside the loop'''
-                matches.append(Match(remaining_sorted_list[0], remaining_sorted_list[1]))
+                matches.append(Match(remaining_sorted_list[0], remaining_sorted_list[1], False))
                 remaining_sorted_list.pop(1)
                 remaining_sorted_list.pop(0)
                 return remaining_sorted_list
@@ -110,7 +118,7 @@ class TournamentRunnerController:
             return matches
 
         sorted_list = self.sort_players_by_score_then_rank(tournament.attendees)
-        if tournament.rounds is None or len(tournament.rounds) == 0:
+        if round_position == 0:
             return generate_first_tour_matches_pairs(sorted_list)
         else:
             return generate_following_tour_matches_pairs(sorted_list)
