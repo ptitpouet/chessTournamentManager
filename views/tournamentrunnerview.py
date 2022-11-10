@@ -24,6 +24,29 @@ class TournamentRunnerView:
             print(str(match))
         print("-------------------------------------------------------------------------------------------------------")
 
+    def display_all_match_results(self, round):
+        print(round.name)
+        for match in round.matches:
+            print(match.result[0][0].firstname + " " + match.result[0][0].lastname
+                  + " " + str(match.result[0][1]) + " | " + str(match.result[1][1]) + " " +
+                  match.result[1][0].firstname + " " + match.result[1][0].lastname)
+        print("-------------------------------------------------------------------------------------------------------")
+
+    def display_tournament_overall_ranking(self, tournament):
+        print("-------------------------------------------------------------------------------------------------------")
+        print("TOURNAMENT OVERALL RANKING:")
+        for attendee in tournament.attendees:
+            print(attendee.firstname + " " + attendee.lastname + " : " + str(attendee.score))
+        print("-------------------------------------------------------------------------------------------------------")
+
+    def prompt_for_tournament_reset(self):
+        userinput = input('     > Do you want to restart this Tournament? Y(es)[default] or N(o)')
+        userinput = str(userinput).lower()
+        if userinput == 'y' or userinput == 'yes' or userinput == 'oui' or userinput == 'o' or userinput == '':
+            return True
+        elif userinput == 'n' or userinput == 'no' or userinput == 'non':
+            return False
+
     def prompt_for_match_result(self, match):
         print(str(match))
         print("     0 | " + "-- Draw Match --")
@@ -40,9 +63,9 @@ class TournamentRunnerView:
         print("-------------------------------------------------------------------------------------------------------")
         print("Players List:")
         for attendee in attendees:
-            print("|" + attendee.lastname + ' ' + attendee.firstname + ' (' \
+            print("|" + attendee.firstname + ' ' + attendee.lastname + ' (' \
                   + GENDER[attendee.gender] + '|' + attendee.birthday + ') - ' \
-                  + str(attendee.rank))
+                  + "#" + str(attendee.rank))
         print("-------------------------------------------------------------------------------------------------------")
 
     def display_player_to_pick(self, i, player):

@@ -26,5 +26,6 @@ class Player:
             'birthday': self.birthday,
             'gender': self.gender,
             'rank': self.rank,
+            'score': self.score
         }
         return serialized_player

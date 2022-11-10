@@ -1,6 +1,8 @@
 from tinydb import TinyDB
 
+from models.match import Match
 from models.player import Player
+from models.round import Round
 from models.tournament import Tournament
 
 database_name = 'db.json'
@@ -63,7 +65,8 @@ class Database:
                                 serialized_tournament['time_control'])
         for serialized_player in serialized_tournament['attendees']:
             tournament.attendees.append(self.deserialize_player(serialized_player))
-        tournament.rounds = serialized_tournament['rounds']
+        for serialized_round in serialized_tournament['rounds']:
+            tournament.rounds.append(self.deserialize_round(serialized_round))
         tournament.is_finished = serialized_tournament['is_finished']
         return tournament
 
@@ -85,7 +88,6 @@ class Database:
 
     def insert_player_in_database(self, player):
         self.add_object_in_database(players_table_name, player.serialize())
-
 
     def save_players_list_in_database(self, players_list_to_save):
         def get_serialized_players_list(players_list_to_serialize):
@@ -116,4 +118,24 @@ class Database:
                         serialized_player['birthday'],
                         serialized_player['gender'],
                         serialized_player['rank'])
+
+        player.score = serialized_player['score']
         return player
+
+    def deserialize_round(self, serialized_round):
+        round = Round(serialized_round['name'],
+                      serialized_round['start'],
+                      serialized_round['end'],
+                      serialized_round['is_finished'])
+        for serialized_match in serialized_round['matches']:
+            round.matches.append(self.deserialize_match(serialized_match))
+        return round
+
+    def deserialize_match(self, serialized_match):
+        match = Match(self.deserialize_player(serialized_match['white_player']),
+                      self.deserialize_player(serialized_match['black_player']),
+                      serialized_match['is_finished'])
+        if match.is_finished:
+            match.result = ([match.white_player, serialized_match['white_player_match_score']],
+                            [match.black_player, serialized_match['black_player_match_score']])
+        return match

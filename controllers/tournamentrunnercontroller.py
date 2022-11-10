@@ -27,31 +27,38 @@ class TournamentRunnerController:
 
         if self.tournament.rounds is None or len(self.tournament.rounds) == 0 :
             self.tournament.rounds = self.create_tournament_rounds(self.tournament.nb_of_rounds)
+        else:
+            if self.view.prompt_for_tournament_reset() :
+                self.tournament.rounds = self.create_tournament_rounds(self.tournament.nb_of_rounds)
 
         for i in range(len(self.tournament.rounds)):
             if not self.tournament.rounds[i].is_finished:
                 self.run_round(i, self.tournament)
+                self.db.update_tournament_in_database(self.tournament)
 
         self.display_tournament_results(self.tournament)
 
+
     def display_tournament_results(self, tournament):
+        self.view.display_tournament_overall_ranking(self.tournament)
         for current_round in tournament.rounds:
-            for match in current_round.matches:
-                print(str(match.result))
-        for attendee in tournament.attendees:
-            print(attendee.firstname + " " + str(attendee.score))
+            self.view.display_all_match_results(current_round)
 
     def create_tournament_rounds(self, nb_of_rounds):
         rounds = []
         for i in range(nb_of_rounds):
-            rounds.append(Round("Round " + str(i + 1), time.time(), None))
+            rounds.append(Round("Round " + str(i + 1), None, None, False))
         return rounds
 
     def run_round(self, round_position, tournament):
-        tournament.rounds[round_position].matches = (self.create_matches_of_round(round_position, tournament))
+        tournament.rounds[round_position].start_round(time.time(),
+                                                      self.create_matches_of_round(round_position, tournament))
         self.view.display_round_details(tournament.rounds[round_position])
         for match in tournament.rounds[round_position].matches:
-            self.collect_match_winner(match)
+            if not match.is_finished:
+                self.collect_match_winner(match)
+                self.db.update_tournament_in_database(self.tournament)
+        tournament.rounds[round_position].close_round(time.time())
 
     def collect_match_winner(self, match):
         winner_input = self.view.prompt_for_match_result(match)
@@ -148,7 +155,7 @@ class TournamentRunnerController:
             '''refresh the players list to delete the user added'''
             players_list = self.add_attendees_in_list(players_list)
 
-        if self.view.prompt_for_add_another_player():
+        if len(players_list)>0 and self.view.prompt_for_add_another_player():
             self.add_players_in_attendees_list(players_list)
 
     def add_attendees_in_list(self, all_players_list):

@@ -20,8 +20,8 @@ class Tournament:
 
     def __str__(self):
         """Used in print."""
-        return f"{self.name} {self.location} ({self.description}" \
-               f" - {self.date}). Rounds : {self.nb_of_rounds} | Mode : {TIME_CONTROL[self.time_control]}"
+        return f"{self.name} {self.location} ({self.date}). " \
+               f"Rounds : {self.nb_of_rounds} | Mode : {TIME_CONTROL[self.time_control]}"
 
     def __repr__(self):
         """Used in print."""
