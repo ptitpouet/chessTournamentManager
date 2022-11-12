@@ -1,12 +1,8 @@
 from controllers.playerscontroller import PlayersController
 from models.match import Match
-from models.player import Player
 import time
 from models.round import Round
-from views.homeview import HomeView
 from operator import attrgetter
-from random import randint
-from datetime import datetime
 
 from views.playersmenuview import PlayersMenuView
 

@@ -5,9 +5,10 @@ from models.player import Player
 
 
 class PlayersController:
-    def __init__(self, view, database):
+    def __init__(self, view, controller, database):
         # views
         self.view = view
+        self.controller = controller
         self.db = database
 
     def run(self):
@@ -26,10 +27,7 @@ class PlayersController:
             pass
 
     def back_home(self):
-        pass
-        '''self.view = HomeView()
-        home_controller = HomeController(self.view, self.db)
-        home_controller.run()'''
+        self.controller.home_controller.run()
 
     def display_player_menu(self):
         self.view = PlayersMenuView()

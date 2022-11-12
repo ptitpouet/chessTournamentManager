@@ -1,8 +1,10 @@
 class ReportController:
 
-    def __init__(self, view):
+    def __init__(self, view, controller, database):
         # views
         self.view = view
+        self.controller = controller
+        self.db = database
 
     def run(self):
         self.view.show_welcome()

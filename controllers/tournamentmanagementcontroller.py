@@ -1,6 +1,5 @@
 from controllers.tournamentrunnercontroller import TournamentRunnerController
 from models.tournament import Tournament
-from views.homeview import HomeView
 from views.tournamentcreationview import TournamentCreationView
 from views.tournamentmenuview import TournamentMenuView
 from views.tournamentrunnerview import TournamentRunnerView
@@ -9,9 +8,10 @@ from views.tournamentslistview import TournamentsListView
 
 class TournamentManagementController:
 
-    def __init__(self, view, database):
+    def __init__(self, view, controller, database):
         # views
         self.view = view
+        self.controller = controller
         self.db = database
 
     def run(self):
@@ -29,9 +29,7 @@ class TournamentManagementController:
             pass
 
     def back_home(self):
-        self.view = HomeView()
-        #home_controller = HomeController(self.view, self.db)
-        #home_controller.run()
+        self.controller.home_controller.run()
 
     def display_tournament_menu(self):
         self.view = TournamentMenuView()

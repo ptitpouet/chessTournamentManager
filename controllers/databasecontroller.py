@@ -10,7 +10,7 @@ players_table_name = 'players'
 tournaments_table_name = 'tournaments'
 
 
-class Database:
+class DatabaseController:
 
     def __init__(self):
         self.db = TinyDB(database_name)

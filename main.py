@@ -1,13 +1,9 @@
-from database import Database
-from views.homeview import HomeView
-from controllers.homecontroller import HomeController
+from controllers.applicationcontroller import ApplicationController
 
 
 def main():
-    database = Database()
-    home_view = HomeView()
-    home_controller = HomeController(home_view, database)
-    home_controller.run()
+    application_controller = ApplicationController()
+    application_controller.run()
 
 
 if __name__ == '__main__':
