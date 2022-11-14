@@ -1,11 +1,3 @@
-from controllers.tournamentrunnercontroller import TournamentRunnerController
-from models.tournament import Tournament
-from views.tournamentcreationview import TournamentCreationView
-from views.tournamentmenuview import TournamentMenuView
-from views.tournamentrunnerview import TournamentRunnerView
-from views.tournamentslistview import TournamentsListView
-
-
 class TournamentManagementController:
 
     def __init__(self, view, controller, database):
@@ -32,7 +24,6 @@ class TournamentManagementController:
         self.controller.home_controller.run()
 
     def display_tournament_menu(self):
-        self.view = TournamentMenuView()
         self.run()
 
     def select_tournament(self, tournaments_list):
@@ -42,9 +33,7 @@ class TournamentManagementController:
             return tournaments_list[index_tournament_id]
 
     def run_tournament(self, tournament):
-        self.view = TournamentRunnerView()
-        tournament_runner_controller = TournamentRunnerController(self.view, tournament, self.db)
-        tournament_runner_controller.run()
+        self.controller.tournament_runner_controller.run(tournament)
 
     def launcher_tournament(self, tournaments_list):
         self.display_tournaments_list()
@@ -52,8 +41,6 @@ class TournamentManagementController:
         self.run_tournament(tournament)
 
     def display_tournaments_list(self):
-        self.view = TournamentsListView()
-
         tournaments_list = self.db.load_tournaments_list_from_database()
         i = 0
         for tournament in tournaments_list:
@@ -100,68 +87,4 @@ class TournamentManagementController:
             self.display_tournaments_list_options(tournaments_list)
 
     def create_tournament(self):
-        self.view = TournamentCreationView()
-        self.view.show_welcome()
-
-        #tournaments_list = self.db.load_tournaments_list_from_database()
-
-        def get_name():
-            name = self.view.prompt_for_tournament_name()
-            if name is None:
-                get_name()
-            else:
-                return name
-
-        def get_location():
-            location = self.view.prompt_for_tournament_location()
-            if location is None:
-                get_location()
-            else:
-                return location
-
-        def get_date():
-            date = self.view.prompt_for_tournament_date()
-            if date is None:
-                get_date()
-            else:
-                return date
-
-        def get_nb_of_rounds():
-            nb_of_rounds = self.view.prompt_for_tournament_nb_of_rounds()
-            if nb_of_rounds is None:
-                get_nb_of_rounds()
-            else:
-                return nb_of_rounds
-
-        def get_description():
-            description = self.view.prompt_for_tournament_description()
-            if description is None:
-                get_description()
-            else:
-                return description
-
-        def get_time_control():
-            time_control = self.view.prompt_for_tournament_time_control()
-            if time_control is None:
-                get_time_control()
-            else:
-                return time_control
-
-        tournament = Tournament(
-            get_name(),
-            get_location(),
-            get_date(),
-            get_nb_of_rounds(),
-            get_description(),
-            get_time_control()
-        )
-        #tournaments_list.append(tournament)
-
-        self.db.insert_tournament_in_database(tournament)
-
-        if self.view.prompt_for_load_created_tournament():
-            self.run_tournament(tournament)
-        else:
-            self.display_tournament_menu()
-
-
+        self.controller.tournament_creation_controller.run()

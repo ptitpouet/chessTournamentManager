@@ -1,4 +1,10 @@
-OPTIONS = (
+MENU_OPTIONS = (
+    'Create a Tournament',
+    'Tournament Manager',
+    '<- back'
+)
+
+TOURNAMENT_OPTIONS = (
     'Launch a Tournament',
     'Create a new Tournament',
     '[!] Delete a Tournament',
@@ -7,7 +13,29 @@ OPTIONS = (
 )
 
 
-class TournamentsListView:
+class TournamentManagementView:
+
+    def show_welcome(self):
+        """Welcome the user"""
+        print('~~ Tournament Management ~~')
+
+    def prompt_for_section(self):
+        """Prompt for the Main Menu"""
+        user_choice = 0
+        print("------------------------------------------------")
+        print("     > What do you want to do?")
+
+        def print_menu():
+            for value in MENU_OPTIONS:
+                print(MENU_OPTIONS.index(value) + 1, '--', value)
+
+        print_menu()
+        try:
+            user_choice = int(input('     > Enter your choice: '))
+        except:
+            print('!!! Wrong input. Please enter a number between 1 and ' + str(len(MENU_OPTIONS) + 1))
+
+        return user_choice
 
     def print_separator_line(self):
         print("-------------------------------------------------------------------------------------------------------")
@@ -49,13 +77,13 @@ class TournamentsListView:
         print("     > What do you want to do?")
 
         def print_menu():
-            for value in OPTIONS:
-                print(OPTIONS.index(value) + 1, '--', value)
+            for value in TOURNAMENT_OPTIONS:
+                print(TOURNAMENT_OPTIONS.index(value) + 1, '--', value)
 
         print_menu()
         try:
             user_choice = int(input('     > Enter your choice: '))
         except:
-            print('!!! Wrong input. Please enter a number between 1 and ' + str(len(OPTIONS) + 1))
+            print('!!! Wrong input. Please enter a number between 1 and ' + str(len(TOURNAMENT_OPTIONS) + 1))
 
         return user_choice

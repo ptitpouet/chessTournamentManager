@@ -12,7 +12,7 @@ class HomeController:
         if option == 1:
             self.controller.tournament_management_controller.run()
         elif option == 2:
-            self.controller.players_controller.run()
+            self.controller.player_management_controller.run()
         elif option == 3:
             self.controller.report_controller.run()
         elif option == 4:

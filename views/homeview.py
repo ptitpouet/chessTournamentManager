@@ -1,6 +1,6 @@
 OPTIONS = (
     '|| Tournament ||',
-    'Players administration',
+    'Player administration',
     'Reports',
     '< Exit >'
 )

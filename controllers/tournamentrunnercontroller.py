@@ -1,30 +1,29 @@
-from controllers.playerscontroller import PlayersController
 from models.match import Match
 import time
 from models.round import Round
 from operator import attrgetter
 
-from views.playersmenuview import PlayersMenuView
-
 
 class TournamentRunnerController:
 
-    def __init__(self, view, tournament, database):
+    def __init__(self, view, controller, database):
         # views
         self.view = view
+        self.controller = controller
         self.db = database
-        self.tournament = tournament
+        self.tournament = None
 
-    def run(self):
+    def run(self, tournament):
+        self.tournament = tournament
         self.view.show_welcome()
         self.initial_check_for_attendees(self.tournament)
         self.view.display_tournament_details(self.tournament)
         self.view.display_tournament_players(self.sort_players_by_score_then_rank(self.tournament.attendees))
 
-        if self.tournament.rounds is None or len(self.tournament.rounds) == 0 :
+        if self.tournament.rounds is None or len(self.tournament.rounds) == 0:
             self.tournament.rounds = self.create_tournament_rounds(self.tournament.nb_of_rounds)
         else:
-            if self.view.prompt_for_tournament_reset() :
+            if self.view.prompt_for_tournament_reset():
                 self.tournament.rounds = self.create_tournament_rounds(self.tournament.nb_of_rounds)
 
         for i in range(len(self.tournament.rounds)):
@@ -33,10 +32,15 @@ class TournamentRunnerController:
                 self.db.update_tournament_in_database(self.tournament)
 
         self.display_tournament_results(self.tournament)
-
+        if self.view.prompt_user_for_return_to_tournament_menu():
+            self.back_to_tournament_management()
 
     def display_tournament_results(self, tournament):
+        ''' last sorting of the list of attendees '''
+        self.sort_players_by_score_then_rank(self.tournament.attendees)
+        ''' overall tournament ranking of attendees '''
         self.view.display_tournament_overall_ranking(self.tournament)
+        ''' display all individual matches result '''
         for current_round in tournament.rounds:
             self.view.display_all_match_results(current_round)
 
@@ -68,9 +72,10 @@ class TournamentRunnerController:
             self.collect_match_winner(match)
 
     def back_to_player_management(self):
-        self.view = PlayersMenuView()
-        players_controller = PlayersController(self.view, self.db)
-        players_controller.run()
+        self.controller.player_management_controller.run()
+
+    def back_to_tournament_management(self):
+        self.controller.tournament_management_controller.run()
 
     def sort_players_by_alphabet_order(self, players_list):
         """ Sort method by score, then rank, then birthday"""
@@ -85,11 +90,13 @@ class TournamentRunnerController:
             """On the 1st round, the list is split in 2 half. 1st player of the first half play with first of 2nd"""
             matches = []
             for i in range(0, int(len(first_sorted_list) / 2), 1):
-                matches.append(Match(first_sorted_list[i], first_sorted_list[i + int(len(first_sorted_list) / 2)], False))
+                matches.append(
+                    Match(first_sorted_list[i], first_sorted_list[i + int(len(first_sorted_list) / 2)], False))
             return matches
 
         def generate_following_tour_matches_pairs(following_sorted_list):
             """On the 2nd and following rounds, players play against each other, based on their current score"""
+
             def has_players_already_played(tournament_to_check, player, opponent):
                 has_already_played = False
                 for current_round in tournament_to_check.rounds:
@@ -151,7 +158,7 @@ class TournamentRunnerController:
             '''refresh the players list to delete the user added'''
             players_list = self.add_attendees_in_list(players_list)
 
-        if len(players_list)>0 and self.view.prompt_for_add_another_player():
+        if len(players_list) > 0 and self.view.prompt_for_add_another_player():
             self.add_players_in_attendees_list(players_list)
 
     def add_attendees_in_list(self, all_players_list):

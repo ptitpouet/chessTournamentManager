@@ -1,4 +1,10 @@
-OPTIONS = (
+MENU_OPTIONS = (
+    'Create a new Player',
+    'Players Database',
+    '<- back'
+)
+
+PLAYER_OPTIONS = (
     'Add a new Player',
     'Update a Player Rank',
     '[!]Delete a Player from database',
@@ -7,8 +13,33 @@ OPTIONS = (
 )
 
 
-class PlayersListView:
+class PlayerManagementView:
 
+    def show_welcome(self):
+        """Welcome the user"""
+        print('~~ Players Administration ~~')
+
+    def display_warning_database_empty(self):
+        print("------------------------------------------------")
+        print('!!! Player Database empty. Please add players')
+
+    def prompt_for_section(self):
+        """Prompt for the players Administration"""
+        user_choice = 0
+        print("------------------------------------------------")
+        print("     > What do you want to do?")
+
+        def print_menu():
+            for value in MENU_OPTIONS:
+                print(MENU_OPTIONS.index(value) + 1, '--', value)
+
+        print_menu()
+        try:
+            user_choice = int(input('Enter your choice: '))
+        except:
+            print('!!! Wrong input. Please enter a number between 1 and ' + str(len(MENU_OPTIONS) + 1))
+
+        return user_choice
 
     def print_separator_line(self):
         print("-------------------------------------------------------------------------------------------------------")
@@ -51,7 +82,7 @@ class PlayersListView:
                 print('Success. Rank updated')
                 return rank
             else:
-                console_message = 'Input shall be a positive integer value. (> ' + rank+')'
+                console_message = 'Input shall be a positive integer value. (> ' + rank + ')'
                 print(console_message)
                 raise Exception(console_message)
         except:
@@ -64,13 +95,13 @@ class PlayersListView:
         print("     > What do you want to do?")
 
         def print_menu():
-            for value in OPTIONS:
-                print(OPTIONS.index(value) + 1, '--', value)
+            for value in PLAYER_OPTIONS:
+                print(PLAYER_OPTIONS.index(value) + 1, '--', value)
 
         print_menu()
         try:
             user_choice = int(input('Enter your choice: '))
         except:
-            print('!!! Wrong input. Please enter a number between 1 and ' + str(len(OPTIONS) + 1))
+            print('!!! Wrong input. Please enter a number between 1 and ' + str(len(PLAYER_OPTIONS) + 1))
 
         return user_choice

@@ -39,6 +39,10 @@ class TournamentRunnerView:
             print(attendee.firstname + " " + attendee.lastname + " : " + str(attendee.score))
         print("-------------------------------------------------------------------------------------------------------")
 
+    def prompt_user_for_return_to_tournament_menu(self):
+        userinput = input('     > Enter any key to return Tournament Menu')
+        return True
+
     def prompt_for_tournament_reset(self):
         userinput = input('     > Do you want to restart this Tournament? Y(es)[default] or N(o)')
         userinput = str(userinput).lower()
@@ -73,8 +77,9 @@ class TournamentRunnerView:
               + ' (' + GENDER[player.gender] + '|' + player.birthday + ')')
 
     def display_warning_no_players(self):
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("-------------------------------------------------------------------------------------------------------")
         print("Players database empty. You need to add players first")
+        print("-------------------------------------------------------------------------------------------------------")
 
     def prompt_for_player_id(self, length):
         """Prompt for Player id in list"""

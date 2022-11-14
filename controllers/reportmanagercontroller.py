@@ -1,4 +1,4 @@
-class ReportController:
+class ReportManagerController:
 
     def __init__(self, view, controller, database):
         # views

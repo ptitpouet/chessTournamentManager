@@ -1,4 +1,4 @@
-class ReportView:
+class ReportManagerView:
 
     def show_welcome(self):
         """Welcome the user"""

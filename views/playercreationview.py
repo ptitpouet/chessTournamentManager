@@ -1,7 +1,7 @@
 from models.player import GENDER
 
 
-class PlayersCreationView:
+class PlayerCreationView:
 
     def show_welcome(self):
         """New User Creation"""
