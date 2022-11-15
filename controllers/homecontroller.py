@@ -14,7 +14,7 @@ class HomeController:
         elif option == 2:
             self.controller.player_management_controller.run()
         elif option == 3:
-            self.controller.report_controller.run()
+            self.controller.report_management_controller.run()
         elif option == 4:
             quit()
         else:

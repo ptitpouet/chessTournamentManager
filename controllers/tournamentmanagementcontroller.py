@@ -8,6 +8,9 @@ class TournamentManagementController:
 
     def run(self):
         self.view.show_welcome()
+        self.display_menu_options()
+
+    def display_menu_options(self):
         option = self.view.prompt_for_section()
 
         if option == 1:
@@ -18,7 +21,7 @@ class TournamentManagementController:
         elif option == 3:
             self.back_home()
         else:
-            pass
+            self.display_menu_options()
 
     def back_home(self):
         self.controller.home_controller.run()
@@ -55,19 +58,18 @@ class TournamentManagementController:
                 self.launcher_tournament(tournaments_list)
             elif option == 2:
                 self.create_tournament()
-                self.display_tournament_menu()
+                self.display_menu_options()
             elif option == 3:
                 self.delete_tournament()
-                self.display_tournament_menu()
+                self.display_menu_options()
             elif option == 4:
                 self.reset_tournaments_database()
             elif option == 5:
-                self.display_tournament_menu()
-                self.display_tournament_menu()
+                self.display_menu_options()
             else:
-                self.display_tournament_menu()
+                self.display_menu_options()
         else:
-            self.display_tournament_menu()
+            self.display_menu_options()
 
     def reset_tournaments_database(self):
         self.db.reset_tournaments_table()

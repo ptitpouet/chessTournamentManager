@@ -38,11 +38,12 @@ class TournamentRunnerController:
     def display_tournament_results(self, tournament):
         ''' last sorting of the list of attendees '''
         self.sort_players_by_score_then_rank(self.tournament.attendees)
+
         ''' overall tournament ranking of attendees '''
         self.view.display_tournament_overall_ranking(self.tournament)
         ''' display all individual matches result '''
         for current_round in tournament.rounds:
-            self.view.display_all_match_results(current_round)
+            self.view.display_round_details(current_round)
 
     def create_tournament_rounds(self, nb_of_rounds):
         rounds = []

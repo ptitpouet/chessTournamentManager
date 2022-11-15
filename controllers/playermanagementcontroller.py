@@ -20,7 +20,7 @@ class PlayerManagementController:
         elif option == 3:
             self.back_home()
         else:
-            pass
+            self.display_menu_options()
 
     def back_home(self):
         self.controller.home_controller.run()
