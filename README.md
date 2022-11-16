@@ -21,11 +21,11 @@ Le fichier [requirements.txt](requirements.txt) contient les dépendences pour l
 
 Pour rappel :
 Création de votre environnement virtuel
-    python -m venv <environment name>
+    $ python -m venv <environment name>
 Activation de l'environnement virtuel
-    .\<environment name>\Scripts\activate.bat
+    $ .\<environment name>\Scripts\activate.bat
 Installer les fichiers du requirements.txt
-    pip install -r requirements.txt       
+    $ pip install -r requirements.txt       
 
 
 # Lancer le programme
