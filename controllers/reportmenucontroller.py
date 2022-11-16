@@ -1,7 +1,7 @@
 from operator import attrgetter
 
 
-class ReportManagementController:
+class ReportMenuController:
 
     def __init__(self, view, controller, database):
         # views
@@ -44,7 +44,7 @@ class ReportManagementController:
         return tournaments_list
 
     def display_tournament_options(self, tournament):
-        if tournament is not None :
+        if tournament is not None:
             option = self.view.prompt_for_list_interaction()
             if option == 1:
                 self.report_tournament_players(tournament, self.view.prompt_for_sort_by_rank_or_alphabetic())
@@ -74,12 +74,6 @@ class ReportManagementController:
         ''' display all individual matches result '''
         for current_round in tournament.rounds:
             self.view.display_round_details(current_round)
-
-    def select_tournament(self, tournaments_list):
-        tournament_id = self.view.prompt_for_tournament_id(len(tournaments_list))
-        if tournament_id is not None:
-            index_tournament_id = tournament_id - 1
-            return tournaments_list[index_tournament_id]
 
     def back_home(self):
         self.controller.home_controller.run()

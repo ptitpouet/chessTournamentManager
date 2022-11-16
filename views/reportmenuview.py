@@ -13,7 +13,7 @@ TOURNAMENT_OPTIONS = (
 )
 
 
-class ReportManagementView:
+class ReportMenuView:
 
     def show_welcome(self):
         """Welcome the user"""
@@ -22,7 +22,7 @@ class ReportManagementView:
     def prompt_for_section(self):
         """Prompt for the Main Menu"""
         user_choice = 0
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
         print("     > What do you want to do?")
 
         def print_menu():
@@ -32,7 +32,7 @@ class ReportManagementView:
         print_menu()
         try:
             user_choice = int(input('     > Enter your choice: '))
-        except:
+        except ValueError:
             print('!!! Wrong input. Please enter a number between 1 and ' + str(len(REPORT_OPTIONS) + 1))
 
         return user_choice
@@ -48,7 +48,7 @@ class ReportManagementView:
                 return False
             else:
                 return False
-        except:
+        except ValueError:
             print('Wrong input. Please retry...')
 
     def display_player_with_position(self, i, player):
@@ -60,7 +60,7 @@ class ReportManagementView:
         print(str(player))
 
     def print_separator_line(self):
-        print("-------------------------------------------------------------------------------------------------------")
+        print("------------------------------------------------------------------------------------------------------")
 
     def display_tournament(self, i, tournament):
         self.print_separator_line()
@@ -77,24 +77,24 @@ class ReportManagementView:
                                   + '). Value entered was: ' + str(user_input)
                 print(console_message)
                 raise Exception(console_message)
-        except:
+        except ValueError:
             print('Wrong input. Please enter a valid number (between 1 and ' + str(length) + ')')
 
     def display_tournament_attendees(self, attendees):
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
         print("TOURNAMENT ATTENDEES:")
         for attendee in attendees:
             print(attendee.firstname + " " + attendee.lastname + " : " + str(attendee.score))
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
 
     def display_round_details(self, current_round):
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
         print(str(current_round.name))
         print("started on " + str(datetime.fromtimestamp(current_round.start).strftime("%m/%d/%Y at %H:%M")))
         for match in current_round.matches:
             print(str(match))
         print("End of the round: " + str(datetime.fromtimestamp(current_round.end).strftime("%H:%M")))
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
 
     def prompt_for_list_interaction(self):
         """Prompt for the report list Options"""
@@ -109,11 +109,11 @@ class ReportManagementView:
         print_menu()
         try:
             user_choice = int(input('     > Enter your choice: '))
-        except:
+        except ValueError:
             print('!!! Wrong input. Please enter a number between 1 and ' + str(len(TOURNAMENT_OPTIONS) + 1))
 
         return user_choice
 
     def prompt_user_to_return(self):
-        userinput = input('     > Enter any key to return')
+        input('     > Enter any key to return')
         return True

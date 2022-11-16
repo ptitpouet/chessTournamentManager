@@ -1,7 +1,3 @@
-from typing import List
-from .player import Player
-from .round import Round
-
 TIME_CONTROL = ("bullet", "blitz", "fast")
 
 
@@ -54,4 +50,3 @@ class Tournament:
             'is_finished': self.is_finished
         }
         return serialized_tournament
-

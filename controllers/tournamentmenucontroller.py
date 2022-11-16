@@ -1,4 +1,4 @@
-class TournamentManagementController:
+class TournamentMenuController:
 
     def __init__(self, view, controller, database):
         # views

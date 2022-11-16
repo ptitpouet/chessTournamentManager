@@ -1,6 +1,3 @@
-from .player import Player
-
-
 class Match:
     def __init__(self, white_player, black_player, is_finished):
         self.white_player = white_player

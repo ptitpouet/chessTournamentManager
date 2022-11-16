@@ -7,9 +7,12 @@ class TournamentRunnerView:
     @staticmethod
     def show_welcome():
         """Welcome the user"""
-        print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
-        print('                                         ~~ Tournament LAUNCH ~~                                       ')
-        print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
+        print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
+        print('                                           ~~ TOURNAMENT ~~                                           ')
+        print('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°')
+
+    def print_separator_line(self):
+        print("------------------------------------------------------------------------------------------------------")
 
     def display_tournament_details(self, tournament):
         print(tournament.name + ' (' + tournament.date + ' : ' + tournament.location + ')' +
@@ -18,11 +21,11 @@ class TournamentRunnerView:
         print(tournament.description)
 
     def display_round_details(self, starting_round):
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
         print(str(starting_round.name))
         for match in starting_round.matches:
             print(str(match))
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
 
     def display_all_match_results(self, round):
         print(round.name)
@@ -30,17 +33,17 @@ class TournamentRunnerView:
             print(match.result[0][0].firstname + " " + match.result[0][0].lastname
                   + " " + str(match.result[0][1]) + " | " + str(match.result[1][1]) + " " +
                   match.result[1][0].firstname + " " + match.result[1][0].lastname)
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
 
     def display_tournament_overall_ranking(self, tournament):
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
         print("TOURNAMENT OVERALL RANKING:")
         for attendee in tournament.attendees:
             print(attendee.firstname + " " + attendee.lastname + " : " + str(attendee.score))
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
 
     def prompt_user_for_return_to_tournament_menu(self):
-        userinput = input('     > Enter any key to return Tournament Menu')
+        input('     > Enter any key to return Tournament Menu')
         return True
 
     def prompt_for_tournament_reset(self):
@@ -59,27 +62,28 @@ class TournamentRunnerView:
 
         try:
             return int(input("Select the winner ( 1 | 2 ) or Draw ( 0 ): "))
-        except:
+        except ValueError:
             print("!!! Error. Enter '1' or '2'")
             return -1
 
     def display_tournament_players(self, attendees):
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
         print("Players List:")
         for attendee in attendees:
-            print("|" + attendee.firstname + ' ' + attendee.lastname + ' (' \
-                  + GENDER[attendee.gender] + '|' + attendee.birthday + ') - ' \
+            print("|"
+                  + attendee.firstname + ' ' + attendee.lastname
+                  + ' (' + GENDER[attendee.gender] + '|' + attendee.birthday + ') - '
                   + "#" + str(attendee.rank))
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
 
     def display_player_to_pick(self, i, player):
         print(str(i) + "| " + player.firstname + ' ' + player.lastname
               + ' (' + GENDER[player.gender] + '|' + player.birthday + ')')
 
     def display_warning_no_players(self):
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
         print("Players database empty. You need to add players first")
-        print("-------------------------------------------------------------------------------------------------------")
+        self.print_separator_line()
 
     def prompt_for_player_id(self, length):
         """Prompt for Player id in list"""
@@ -92,7 +96,7 @@ class TournamentRunnerView:
                                   + '). Value entered was: ' + str(user_input)
                 print(console_message)
                 raise Exception(console_message)
-        except:
+        except ValueError:
             print('Wrong input. Please enter a valid number (between 1 and ' + str(length) + ')')
 
     def prompt_for_add_another_player(self):
@@ -103,5 +107,5 @@ class TournamentRunnerView:
                 return True
             elif userinput == 'n' or userinput == 'no' or userinput == 'non':
                 return False
-        except:
+        except ValueError:
             print("!!! Error. Enter 'Y' or 'N'). Operation aborted.")

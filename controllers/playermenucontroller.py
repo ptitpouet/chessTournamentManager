@@ -1,4 +1,4 @@
-class PlayerManagementController:
+class PlayerMenuController:
     def __init__(self, view, controller, database):
         # views
         self.view = view
@@ -51,20 +51,19 @@ class PlayerManagementController:
     def reset_players_database(self):
         self.db.reset_players_table()
 
-    def delete_player(self, players_list):
+    def delete_player(self):
         players_list = self.display_players_list()
         player_id = self.view.prompt_for_player_id(len(players_list))
         if player_id is not None:
             index_player_id = player_id - 1
 
             if self.view.prompt_for_player_deletion_confirmation(players_list[index_player_id]):
-                pass
-                #players_list.pop(index_player_id)
+                players_list.pop(index_player_id)
 
             print("This is a simulated call to action")
-            #self.db.save_players_list_in_database(players_list)
+            self.db.save_players_list_in_database(players_list)
 
-            self.display_players_list_options()
+            self.display_players_list_options(players_list)
         else:
             self.display_players_list_options(players_list)
 
@@ -84,4 +83,3 @@ class PlayerManagementController:
 
     def create_player(self):
         self.controller.player_creation_controller.run()
-

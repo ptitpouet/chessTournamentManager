@@ -1,6 +1,3 @@
-from .match import Match
-
-
 class Round:
     def __init__(self, name, start, end, is_finished):
         self.name = name

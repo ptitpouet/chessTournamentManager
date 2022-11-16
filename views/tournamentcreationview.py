@@ -12,7 +12,7 @@ class TournamentCreationView:
         try:
             name = input('     > Enter a name for the Tournament: ')
             return name
-        except:
+        except ValueError:
             print('Wrong input. Please retry...')
 
     def prompt_for_tournament_location(self):
@@ -20,7 +20,7 @@ class TournamentCreationView:
         try:
             location_name = input('     > Enter the location: ')
             return location_name
-        except:
+        except ValueError:
             print('Wrong input. Please retry...')
 
     def prompt_for_tournament_date(self):
@@ -28,7 +28,7 @@ class TournamentCreationView:
         try:
             date = input('     > Enter the date (yyyy-mm-dd): ')
             return date
-        except:
+        except ValueError:
             print('Wrong input. Please retry...')
 
     def prompt_for_tournament_nb_of_rounds(self):
@@ -36,7 +36,7 @@ class TournamentCreationView:
         try:
             nbofrounds = int(input("     > Enter the number of rounds: "))
             return nbofrounds
-        except:
+        except ValueError:
             print('Wrong input. Please retry...')
 
     def prompt_for_tournament_description(self):
@@ -44,19 +44,20 @@ class TournamentCreationView:
         try:
             description = input('     > Enter the description: ')
             return description
-        except:
+        except ValueError:
             print('Wrong input. Please retry...')
 
     def prompt_for_tournament_time_control(self):
         """Prompt for the tournament time control"""
         user_choice = 0
+
         def print_menu():
             for value in TIME_CONTROL:
                 print(TIME_CONTROL.index(value), '--', value)
         print_menu()
         try:
             user_choice = int(input('     > Enter what Time Control Mode: '))
-        except:
+        except ValueError:
             print('Wrong input. Please enter a number ...')
         return user_choice
 
@@ -72,5 +73,5 @@ class TournamentCreationView:
                 return False
             else:
                 return False
-        except:
+        except ValueError:
             print('Wrong input. Please retry...')

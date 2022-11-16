@@ -13,7 +13,7 @@ TOURNAMENT_OPTIONS = (
 )
 
 
-class TournamentManagementView:
+class TournamentMenuView:
 
     def show_welcome(self):
         """Welcome the user"""
@@ -22,7 +22,7 @@ class TournamentManagementView:
     def prompt_for_section(self):
         """Prompt for the Main Menu"""
         user_choice = 0
-        print("------------------------------------------------")
+        self.print_separator_line()
         print("     > What do you want to do?")
 
         def print_menu():
@@ -32,13 +32,13 @@ class TournamentManagementView:
         print_menu()
         try:
             user_choice = int(input('     > Enter your choice: '))
-        except:
+        except ValueError:
             print('!!! Wrong input. Please enter a number between 1 and ' + str(len(MENU_OPTIONS) + 1))
 
         return user_choice
 
     def print_separator_line(self):
-        print("-------------------------------------------------------------------------------------------------------")
+        print("------------------------------------------------------------------------------------------------------")
 
     def display_tournament(self, i, tournament):
         self.print_separator_line()
@@ -55,7 +55,7 @@ class TournamentManagementView:
                                   + '). Value entered was: ' + str(user_input)
                 print(console_message)
                 raise Exception(console_message)
-        except:
+        except ValueError:
             print('Wrong input. Please enter a valid number (between 1 and ' + str(length) + ')')
 
     def prompt_for_tournament_deletion_confirmation(self, tournament):
@@ -67,7 +67,7 @@ class TournamentManagementView:
                 return True
             elif userinput == 'n' or userinput == 'no' or userinput == 'non' or userinput == '':
                 return False
-        except:
+        except ValueError:
             print("!!! Error. Enter 'Y' or 'N'). Operation aborted.")
 
     def prompt_for_list_interaction(self):
@@ -83,7 +83,7 @@ class TournamentManagementView:
         print_menu()
         try:
             user_choice = int(input('     > Enter your choice: '))
-        except:
+        except ValueError:
             print('!!! Wrong input. Please enter a number between 1 and ' + str(len(TOURNAMENT_OPTIONS) + 1))
 
         return user_choice

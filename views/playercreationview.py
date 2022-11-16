@@ -12,7 +12,7 @@ class PlayerCreationView:
         try:
             last_name = input('     > Enter the last name: ')
             return last_name
-        except:
+        except ValueError:
             print('Wrong input. Please retry...')
 
     def prompt_for_first_name(self):
@@ -20,7 +20,7 @@ class PlayerCreationView:
         try:
             first_name = input('     > Enter the first name: ')
             return first_name
-        except:
+        except ValueError:
             print('Wrong input. Please retry...')
 
     def prompt_for_birthday(self):
@@ -28,7 +28,7 @@ class PlayerCreationView:
         try:
             birthday = input('     > Enter the birthday (yyyy-mm-dd): ')
             return birthday
-        except:
+        except ValueError:
             print('Wrong input. Please retry...')
 
     def prompt_for_gender(self):
@@ -42,7 +42,7 @@ class PlayerCreationView:
         print_menu()
         try:
             user_choice = int(input('     > Enter the gender: '))
-        except:
+        except ValueError:
             print('Wrong input. Please enter a number ...')
 
         return user_choice
@@ -52,7 +52,7 @@ class PlayerCreationView:
         try:
             rank = int(input("     > Enter the player's rank: "))
             return rank
-        except:
+        except ValueError:
             print('Wrong input. Please retry...')
 
     def prompt_for_another_player(self):
@@ -67,5 +67,5 @@ class PlayerCreationView:
                 return False
             else:
                 return False
-        except:
+        except ValueError:
             print('Wrong input. Please retry...')
