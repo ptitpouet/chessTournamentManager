@@ -76,4 +76,4 @@ class TournamentCreationController:
         self.controller.tournament_runner_controller.run(tournament)
 
     def display_tournament_menu(self):
-        self.controller.tournament_management_controller.run()
+        self.controller.tournament_menu_controller.run()

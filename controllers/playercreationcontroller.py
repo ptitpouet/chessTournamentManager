@@ -54,4 +54,4 @@ class PlayerCreationController:
         if self.view.prompt_for_another_player():
             self.run()
         else:
-            self.controller.player_management_controller.run()
+            self.controller.player_menu_controller.run()

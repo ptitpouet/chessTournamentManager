@@ -43,7 +43,7 @@ class TournamentRunnerController:
         self.view.display_tournament_overall_ranking(self.tournament)
         ''' display all individual matches result '''
         for current_round in tournament.rounds:
-            self.view.display_round_details(current_round)
+            self.view.display_all_match_results(current_round)
 
     def create_tournament_rounds(self, nb_of_rounds):
         rounds = []
@@ -57,26 +57,29 @@ class TournamentRunnerController:
         self.view.display_round_details(tournament.rounds[round_position])
         for match in tournament.rounds[round_position].matches:
             if not match.is_finished:
-                self.collect_match_winner(match)
+                match = self.collect_match_winner(match)
                 self.db.update_tournament_in_database(self.tournament)
         tournament.rounds[round_position].close_round(time.time())
 
     def collect_match_winner(self, match):
         winner_input = self.view.prompt_for_match_result(match)
         if winner_input == 0:
-            print(match.update_score(None))
+            match.update_score(None)
         elif winner_input == 1:
-            print(match.update_score(match.white_player))
+            match.update_score(match.white_player)
         elif winner_input == 2:
-            print(match.update_score(match.black_player))
+            match.update_score(match.black_player)
         else:
             self.collect_match_winner(match)
 
+        self.view.display_match_result(match)
+        return match
+
     def back_to_player_management(self):
-        self.controller.player_management_controller.run()
+        self.controller.player_menu_controller.run()
 
     def back_to_tournament_management(self):
-        self.controller.tournament_management_controller.run()
+        self.controller.tournament_menu_controller.run()
 
     def sort_players_by_alphabet_order(self, players_list):
         """ Sort method by score, then rank, then birthday"""

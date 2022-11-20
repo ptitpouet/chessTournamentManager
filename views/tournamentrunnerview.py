@@ -21,18 +21,23 @@ class TournamentRunnerView:
         print(tournament.description)
 
     def display_round_details(self, starting_round):
-        self.print_separator_line()
+        """This method is to show the generated rounds"""
         print(str(starting_round.name))
         for match in starting_round.matches:
             print(str(match))
         self.print_separator_line()
 
+    def display_match_result(self, match):
+        print(match.result[0][0].firstname + " " + match.result[0][0].lastname
+              + " " + str(match.result[0][1]) + " | " + str(match.result[1][1]) + " " +
+              match.result[1][0].firstname + " " + match.result[1][0].lastname)
+
     def display_all_match_results(self, round):
         print(round.name)
         for match in round.matches:
-            print(match.result[0][0].firstname + " " + match.result[0][0].lastname
+            print("<-- " + match.result[0][0].firstname + " " + match.result[0][0].lastname
                   + " " + str(match.result[0][1]) + " | " + str(match.result[1][1]) + " " +
-                  match.result[1][0].firstname + " " + match.result[1][0].lastname)
+                  match.result[1][0].firstname + " " + match.result[1][0].lastname + " -->")
         self.print_separator_line()
 
     def display_tournament_overall_ranking(self, tournament):

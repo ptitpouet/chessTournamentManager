@@ -10,10 +10,10 @@ class Match:
     def __str__(self):
         """Used in print."""
         return f"{self.white_player.firstname} {self.white_player.lastname}" \
-               f" ({self.white_player.birthday}) - {self.white_player.score}" \
+               f" ({self.white_player.birthday})" \
                f"  VS  " \
                f"{self.black_player.firstname} {self.black_player.lastname}" \
-               f" ({self.black_player.birthday}) - {self.black_player.score}"
+               f" ({self.black_player.birthday})"
 
     def __repr__(self):
         """Used in print."""
@@ -33,7 +33,7 @@ class Match:
         return serialized_match
 
     def update_score(self, winner_player):
-        """"""
+        """Close the match by creating the result tuple"""
         if winner_player == self.black_player:
             self.black_player.score += 1
             self.black_player_match_score = 1
@@ -58,4 +58,3 @@ class Match:
         self.result = ([self.white_player, self.white_player_match_score],
                        [self.black_player, self.black_player_match_score])
         self.is_finished = True
-        return self.result

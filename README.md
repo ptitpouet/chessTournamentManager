@@ -12,7 +12,7 @@ Cet outil est un gestionnaire de Tournoi d'échecs.
 - Une section dédiée à l'édition de différents rapports
 
 
-# Liste des dépendences
+# Liste des dépendances
 [requirements.txt](requirements.txt) contient les dépendences pour la mise en place de l'environnement virtuel.
 
 # Création de votre environnement virtuel 
