@@ -22,10 +22,10 @@ class TournamentRunnerView:
 
     def display_round_details(self, starting_round):
         """This method is to show the generated rounds"""
+        self.print_separator_line()
         print(str(starting_round.name))
         for match in starting_round.matches:
             print(str(match))
-        self.print_separator_line()
 
     def display_match_result(self, match):
         print(match.result[0][0].firstname + " " + match.result[0][0].lastname
@@ -48,8 +48,8 @@ class TournamentRunnerView:
         self.print_separator_line()
 
     def prompt_user_for_return_to_tournament_menu(self):
-        input('     > Enter any key to return Tournament Menu')
-        return True
+        userinput = input('     > Enter any key to return Tournament Menu')
+        return userinput
 
     def prompt_for_tournament_reset(self):
         userinput = input('     > Do you want to restart this Tournament? Y(es)[default] or N(o)')
@@ -60,6 +60,7 @@ class TournamentRunnerView:
             return False
 
     def prompt_for_match_result(self, match):
+        self.print_separator_line()
         print(str(match))
         print("     0 | " + "-- Draw Match --")
         print("     1 | " + match.white_player.firstname + ' ' + match.white_player.lastname)

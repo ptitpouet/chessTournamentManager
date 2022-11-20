@@ -14,30 +14,36 @@ class TournamentRunnerController:
         self.tournament = None
 
     def run(self, tournament):
+        '''Initialisation du tournoi'''
         self.tournament = tournament
         self.view.show_welcome()
         self.initial_check_for_attendees(self.tournament)
+        '''Display Tournament details and attendees'''
         self.view.display_tournament_details(self.tournament)
         self.view.display_tournament_players(self.sort_players_by_score_then_rank(self.tournament.attendees))
 
+        '''if round list is empty, it's a fresh start'''
         if self.tournament.rounds is None or len(self.tournament.rounds) == 0:
             self.tournament.rounds = self.create_tournament_rounds(self.tournament.nb_of_rounds)
+
         else:
+            '''Else the Tournament can be restarted or continued'''
             if self.view.prompt_for_tournament_reset():
                 self.tournament.rounds = self.create_tournament_rounds(self.tournament.nb_of_rounds)
-
+                self.tournament.attendees = self.reset_attendees_score(self.tournament.attendees)
+        '''Loop of the rounds'''
         for i in range(len(self.tournament.rounds)):
             if not self.tournament.rounds[i].is_finished:
                 self.run_round(i, self.tournament)
                 self.db.update_tournament_in_database(self.tournament)
-
+        '''At the end, display the results'''
         self.display_tournament_results(self.tournament)
-        if self.view.prompt_user_for_return_to_tournament_menu():
-            self.back_to_tournament_management()
+        self.view.prompt_user_for_return_to_tournament_menu()
+        self.back_to_tournament_management()
 
     def display_tournament_results(self, tournament):
         ''' last sorting of the list of attendees '''
-        self.sort_players_by_score_then_rank(self.tournament.attendees)
+        self.tournament.attendees = self.sort_players_by_score_then_rank(self.tournament.attendees)
 
         ''' overall tournament ranking of attendees '''
         self.view.display_tournament_overall_ranking(self.tournament)
@@ -51,17 +57,28 @@ class TournamentRunnerController:
             rounds.append(Round("Round " + str(i + 1), None, None, False))
         return rounds
 
+    def reset_attendees_score(self, attendees):
+        for attendee in attendees:
+            attendee.score = 0
+        return attendees
+
     def run_round(self, round_position, tournament):
+        '''timestamp round start'''
         tournament.rounds[round_position].start_round(time.time(),
                                                       self.create_matches_of_round(round_position, tournament))
+        '''present the current round details'''
         self.view.display_round_details(tournament.rounds[round_position])
         for match in tournament.rounds[round_position].matches:
             if not match.is_finished:
-                match = self.collect_match_winner(match)
+                '''prompt user to get the match winner'''
+                self.view.display_match_result(self.collect_match_winner(match))
+                '''at each of user input the tournament is saved in database'''
                 self.db.update_tournament_in_database(self.tournament)
+        '''at the end of the round the timestamp close the round'''
         tournament.rounds[round_position].close_round(time.time())
 
     def collect_match_winner(self, match):
+        '''prompt user to get the winning player'''
         winner_input = self.view.prompt_for_match_result(match)
         if winner_input == 0:
             match.update_score(None)
@@ -71,8 +88,6 @@ class TournamentRunnerController:
             match.update_score(match.black_player)
         else:
             self.collect_match_winner(match)
-
-        self.view.display_match_result(match)
         return match
 
     def back_to_player_management(self):
@@ -86,7 +101,7 @@ class TournamentRunnerController:
         return sorted(players_list, key=attrgetter('lastname', 'firstname', 'birthday'))
 
     def sort_players_by_score_then_rank(self, players_list):
-        """ Sort method by score, then rank, then birthday"""
+        """ Sort method by score, then rank"""
         return sorted(players_list, key=lambda obj: (-obj.score, obj.rank))
 
     def create_matches_of_round(self, round_position, tournament):
@@ -102,6 +117,7 @@ class TournamentRunnerController:
             """On the 2nd and following rounds, players play against each other, based on their current score"""
 
             def has_players_already_played(tournament_to_check, player, opponent):
+                '''this method will loop the matches od the tournament to check if players had already played'''
                 has_already_played = False
                 for current_round in tournament_to_check.rounds:
                     if current_round.matches is not None:
@@ -113,6 +129,7 @@ class TournamentRunnerController:
                 return has_already_played
 
             def loop_the_players_list_for_a_match(remaining_sorted_list):
+                '''loop the opponent list and create match if player had never played together once'''
                 for j in range(1, len(remaining_sorted_list), 1):
                     if not has_players_already_played(tournament, remaining_sorted_list[0],
                                                       remaining_sorted_list[j]):
@@ -120,7 +137,7 @@ class TournamentRunnerController:
                         remaining_sorted_list.pop(j)
                         remaining_sorted_list.pop(0)
                         return remaining_sorted_list
-                '''Outside the loop'''
+                '''Player already had match against all the player list. Create match with the 1st following'''
                 matches.append(Match(remaining_sorted_list[0], remaining_sorted_list[1], False))
                 remaining_sorted_list.pop(1)
                 remaining_sorted_list.pop(0)
@@ -131,13 +148,17 @@ class TournamentRunnerController:
                 loop_the_players_list_for_a_match(following_sorted_list)
             return matches
 
+        '''The swiss method require to sort the player by their score, alternatively rank'''
         sorted_list = self.sort_players_by_score_then_rank(tournament.attendees)
         if round_position == 0:
+            '''First round, the sort is quite specific'''
             return generate_first_tour_matches_pairs(sorted_list)
         else:
+            '''common case with most close score match pairing'''
             return generate_following_tour_matches_pairs(sorted_list)
 
     def initial_check_for_attendees(self, tournament):
+        '''check if the tournament had players attached'''
         if tournament.attendees is None or len(tournament.attendees) == 0:
             self.add_players_in_attendees_list(None)
             self.db.update_tournament_in_database(tournament)
@@ -154,6 +175,7 @@ class TournamentRunnerController:
         if players_list is None or len(players_list) == 0:
             players_list = self.db.load_players_list_from_database()
 
+        '''if the database of players is empty'''
         if players_list is None or len(players_list) == 0:
             self.view.display_warning_no_players()
             self.back_to_player_management()
@@ -161,8 +183,10 @@ class TournamentRunnerController:
             self.display_players_list(players_list)
             '''refresh the players list to delete the user added'''
             players_list = self.add_attendees_in_list(players_list)
+            '''From the user list, the user select the list if of the player to add'''
 
         if len(players_list) > 0 and self.view.prompt_for_add_another_player():
+            '''the user prompt, ask for additional player to add'''
             self.add_players_in_attendees_list(players_list)
 
     def add_attendees_in_list(self, all_players_list):

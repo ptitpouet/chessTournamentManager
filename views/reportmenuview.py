@@ -1,14 +1,14 @@
 from datetime import datetime
 
 REPORT_OPTIONS = (
-    'All Players Overall Ranking',
+    'List of all players',
     'Tournament Report',
     '<- back'
 )
 
 TOURNAMENT_OPTIONS = (
-    'Tournament Player Ranking',
-    'Display all Results',
+    'List of players',
+    'Tournament Results',
     '<- back'
 )
 
@@ -52,11 +52,9 @@ class ReportMenuView:
             print('Wrong input. Please retry...')
 
     def display_player_with_position(self, i, player):
-        self.print_separator_line()
         print(str(i) + "| " + str(player))
 
     def display_player(self, player):
-        self.print_separator_line()
         print(str(player))
 
     def print_separator_line(self):
@@ -76,25 +74,26 @@ class ReportMenuView:
                 console_message = 'your input shall be in the list range (1 to' + str(length) \
                                   + '). Value entered was: ' + str(user_input)
                 print(console_message)
-                raise Exception(console_message)
+                raise ValueError(console_message)
         except ValueError:
             print('Wrong input. Please enter a valid number (between 1 and ' + str(length) + ')')
+            self.prompt_for_tournament_id(length)
 
     def display_tournament_attendees(self, attendees):
         self.print_separator_line()
         print("TOURNAMENT ATTENDEES:")
         for attendee in attendees:
-            print(attendee.firstname + " " + attendee.lastname + " : " + str(attendee.score))
-        self.print_separator_line()
+            print(attendee.lastname + " " + attendee.firstname + " : " + str(attendee.score))
 
     def display_round_details(self, current_round):
         self.print_separator_line()
         print(str(current_round.name))
         print("started on " + str(datetime.fromtimestamp(current_round.start).strftime("%m/%d/%Y at %H:%M")))
         for match in current_round.matches:
-            print(str(match))
+            print("<-- " + match.result[0][0].firstname + " " + match.result[0][0].lastname
+                  + " " + str(match.result[0][1]) + " | " + str(match.result[1][1]) + " " +
+                  match.result[1][0].firstname + " " + match.result[1][0].lastname + " -->")
         print("End of the round: " + str(datetime.fromtimestamp(current_round.end).strftime("%H:%M")))
-        self.print_separator_line()
 
     def prompt_for_list_interaction(self):
         """Prompt for the report list Options"""
@@ -115,5 +114,6 @@ class ReportMenuView:
         return user_choice
 
     def prompt_user_to_return(self):
-        input('     > Enter any key to return')
-        return True
+        self.print_separator_line()
+        user_input = input('     > Enter any key to return')
+        return user_input

@@ -9,11 +9,10 @@ class Player:
         self.gender = gender
         self.rank = rank
         self.score = 0
-        self.opponent_list = []
 
     def __str__(self):
         """Used in print."""
-        return f"{self.firstname} {self.lastname} ({GENDER[self.gender]} - {self.birthday}). Rank : {self.rank}"
+        return f"{self.lastname} {self.firstname} ({GENDER[self.gender]} - {self.birthday}). Rank : {self.rank}"
 
     def __repr__(self):
         """Used in print."""

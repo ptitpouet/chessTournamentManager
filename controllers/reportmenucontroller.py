@@ -19,8 +19,8 @@ class ReportMenuController:
 
         if option == 1:
             self.display_all_players_list(self.view.prompt_for_sort_by_rank_or_alphabetic())
-            if self.view.prompt_user_to_return():
-                self.display_menu_options()
+            self.view.prompt_user_to_return()
+            self.display_menu_options()
         elif option == 2:
             tournament = self.select_tournament(self.display_tournaments_list())
             self.display_tournament_options(tournament)
@@ -48,12 +48,12 @@ class ReportMenuController:
             option = self.view.prompt_for_list_interaction()
             if option == 1:
                 self.report_tournament_players(tournament, self.view.prompt_for_sort_by_rank_or_alphabetic())
-                if self.view.prompt_user_to_return():
-                    self.display_tournament_options(tournament)
+                self.view.prompt_user_to_return()
+                self.display_tournament_options(tournament)
             elif option == 2:
                 self.report_tournament_results(tournament)
-                if self.view.prompt_user_to_return():
-                    self.display_tournament_options(tournament)
+                self.view.prompt_user_to_return()
+                self.display_tournament_options(tournament)
             elif option == 3:
                 self.display_menu_options()
             else:
@@ -64,7 +64,7 @@ class ReportMenuController:
     def report_tournament_players(self, tournament, sorted_by_rank):
         '''sort players by rank or alphabetic order'''
         if sorted_by_rank is True:
-            sorted_list = self.sort_players_by_rank(tournament.attendees)
+            sorted_list = self.sort_players_by_score(tournament.attendees)
         else:
             sorted_list = self.sort_players_by_alphabet_order(tournament.attendees)
         ''' display tournament attendees '''
@@ -93,9 +93,13 @@ class ReportMenuController:
                 self.view.display_player(player)
 
     def sort_players_by_alphabet_order(self, players_list):
-        """ Sort method by score, then rank, then birthday"""
+        """ Sort method by last name, first name, then birthday"""
         return sorted(players_list, key=attrgetter('lastname', 'firstname', 'birthday'))
 
     def sort_players_by_rank(self, players_list):
-        """ Sort method by score, then rank, then birthday"""
+        """ Sort method by then rank"""
         return sorted(players_list, key=lambda obj: obj.rank)
+
+    def sort_players_by_score(self, players_list):
+        """ Sort method by score"""
+        return sorted(players_list, key=lambda obj: -obj.score)
