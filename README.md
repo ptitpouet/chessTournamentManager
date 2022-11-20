@@ -34,4 +34,4 @@ Le plugin Flake8 permet de générer des rapports html des violations de la norm
 - Installation :
 $ pip install flake8-html
 - Exécution :
-$ flake8 --format=html --htmldir=flake8-reports
+$ flake8 --format=html --htmldir=flake-report
